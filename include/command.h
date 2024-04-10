@@ -6,6 +6,7 @@
 enum Command {
     LED_TOGGLE,
     LED_POWER_VALUE,
+    TIMER_TOGGLE,
     EXIT,
     INVALID_COMMAND
 };

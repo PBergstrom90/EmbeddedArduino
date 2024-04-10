@@ -7,6 +7,7 @@
 #include "serial.h"
 #include "led.h"
 #include "menu.h"
+#include "timer.h"
 
 void parseUserInput(char inputString[MAX_INPUT_LENGTH]) { 
     if (strlen(inputString) > MAX_INPUT_LENGTH) {
@@ -33,7 +34,9 @@ enum Command parseCommand(const char* input) {
         return LED_TOGGLE;
     } else if (strncmp(input, "ledpower", strlen("ledpower")) == 0) {
         return LED_POWER_VALUE;
-    } else if (strcmp(input, "exit") == 0) {
+    } else if (strncmp(input, "timertoggle", strlen("timertoggle")) == 0) {
+        return TIMER_TOGGLE;
+    }else if (strcmp(input, "exit") == 0) {
         return EXIT;
     }
     return INVALID_COMMAND;
@@ -53,6 +56,12 @@ void executeCommand(enum Command cmd, short value) {
                 uartPutString("ERROR: Invalid LED POWERVALUE.");
                 uartPutChar('\n');
             }
+            break;
+        case TIMER_TOGGLE:
+            timer1Enabled = !timer1Enabled;
+            uartPutString("Timer 1 is: ");
+            uartPutString(timer1Enabled ? "enabled." : "disabled.");
+            uartPutChar('\n');
             break;
         case EXIT:
             uartPutString("Exiting program... ");

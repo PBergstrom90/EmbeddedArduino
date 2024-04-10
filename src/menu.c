@@ -26,8 +26,7 @@ void setup() {
     
     // Initialize the timer
     timerInit();
-    // Enable global interrupts
-    sei();
+
     uartPutString("Setup complete.");
 };
 
@@ -39,7 +38,7 @@ void mainMenu() {
     uartPutChar('\n');
     uartPutString("--- DEVICE ONLINE ---");
     uartPutChar('\n');
-    uartPutString("Submit 'ledtoggle' or 'ledpower <0-255>' command, and press 'Enter'.");  
+    uartPutString("Submit 'ledtoggle', 'timertoggle' or 'ledpower <0-255>' command, and press 'Enter'.");  
     uartPutChar('\n');
     while (isRunning) {
         // In order for the LED to not toggle constantly during a buttonpress, 

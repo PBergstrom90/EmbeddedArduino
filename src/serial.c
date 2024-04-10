@@ -20,6 +20,18 @@ void uartPutChar(const char c) {
     UDR0 = c; // Transmit character.
 };
 
+void uartPutInt(int i) {
+    char buffer[10];
+    sprintf(buffer, "%d", i);
+    uartPutString(buffer);
+};
+
+void uartPutFloat(float f) {
+    char buffer[10];
+    sprintf(buffer, "%.2f", f);
+    uartPutString(buffer);
+};  
+
 void uartPutString(const char *s) {
     // Iterate over each character, received from the pointer.
     while(*s != '\0'){

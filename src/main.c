@@ -7,11 +7,15 @@
 #include "menu.h"
 #include "led.h"
 #include "serial.h"
+#include "device.h"
 
 int main() {
     
     setup();
     mainMenu();
+    
+    uartPutString("--- DEVICE OFFLINE ---");
+    uartPutChar('\n');
     
     return 0;
 }

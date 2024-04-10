@@ -8,6 +8,7 @@
 #include "led.h"
 #include "menu.h"
 #include "timer.h"
+#include "device.h"
 
 void parseUserInput(char inputString[MAX_INPUT_LENGTH]) { 
     if (strlen(inputString) > MAX_INPUT_LENGTH) {
@@ -36,7 +37,9 @@ enum Command parseCommand(const char* input) {
         return LED_POWER_VALUE;
     } else if (strncmp(input, "timertoggle", strlen("timertoggle")) == 0) {
         return TIMER_TOGGLE;
-    }else if (strcmp(input, "exit") == 0) {
+    } else if (strncmp(input, "adctoggle", strlen("adctoggle")) == 0) {
+        return ADC_TOGGLE;
+    } else if (strncmp(input, "exit", strlen("exit")) == 0) {
         return EXIT;
     }
     return INVALID_COMMAND;
@@ -45,9 +48,9 @@ enum Command parseCommand(const char* input) {
 void executeCommand(enum Command cmd, short value) {
     switch (cmd) {
         case LED_TOGGLE:
-                ledToggle();
-                uartPutString("LED is toggled.");
-                uartPutChar('\n');
+            ledToggle();
+            uartPutString("LED is toggled.");
+            uartPutChar('\n');
             break;
         case LED_POWER_VALUE:
             if(value >= MIN_POWER_VALUE && value <= MAX_POWER_VALUE) {
@@ -60,7 +63,14 @@ void executeCommand(enum Command cmd, short value) {
         case TIMER_TOGGLE:
             timer1Enabled = !timer1Enabled;
             uartPutString("Timer 1 is: ");
-            uartPutString(timer1Enabled ? "enabled." : "disabled.");
+            uartPutString(adcToggle ? "enabled." : "disabled.");
+            uartPutChar('\n');
+            break;
+        case ADC_TOGGLE:
+            timer2Enabled = !timer2Enabled;
+            adcToggle = !adcToggle;
+            uartPutString("ADC is: ");
+            uartPutString(timer2Enabled ? "enabled." : "disabled.");
             uartPutChar('\n');
             break;
         case EXIT:

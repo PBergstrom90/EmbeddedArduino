@@ -10,6 +10,8 @@
 
 void uartInit(unsigned int ubrr);
 void uartPutChar(char c);
+void uartPutInt(int i);
+void uartPutFloat(float f);
 void uartPutString(const char *s);
 char uartGetChar();
 void uartRecStringAndEcho(char *s);

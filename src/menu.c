@@ -12,16 +12,14 @@
 bool isRunning = true;
 
 void mainMenu() {
-    while(isRunning) {
-        // --- DRIVER CODE ---
     bool previousButtonState = false;
     char inputString[MAX_INPUT_LENGTH];
     uartPutString("--- DEVICE ONLINE ---");
     uartPutChar('\n');
-    uartPutString("Submit 'ledtoggle', 'timertoggle' or 'ledpower <0-255>' command, and press 'Enter'.");  
+    uartPutString("Submit 'ledtoggle', 'ledtimertoggle', 'adctoggle' or 'ledpower <0-255>' command, and press 'Enter'.");  
     uartPutChar('\n');
+    
     while (isRunning) {
-        
         // In order for the LED to not toggle constantly during a buttonpress, 
         // we check the current and previous state of the button.
         bool currentButtonState = !(PIND & (1 << BUTTON_PIN));
@@ -30,6 +28,10 @@ void mainMenu() {
             buttonPressed();
         }
         previousButtonState = currentButtonState;
+
+        if(adcToggle){
+            adcRead();
+        }
 
         // This condition checks the UART Receive Complete (RXC) -flag in the UART Status Register (UCSR0A),
         // and then records the userinput, as well as echoing the chars back in the Serial Monitor. Parse userinput in command.c.
@@ -42,5 +44,4 @@ void mainMenu() {
             parseUserInput(inputString);
         }
     }
-}
 };

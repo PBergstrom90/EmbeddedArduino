@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <avr/io.h>
+#include <avr/interrupt.h>
 #include "device.h"
 #include "led.h"
 #include "command.h"
@@ -25,6 +27,7 @@ void setup() {
     timer2Init();
     sei();
     adcInit();
+    adcConvert();
     setupDone = true;
     
     if(setupDone){
@@ -53,21 +56,13 @@ void adcInit() {
 };
 
 void adcRead() {
-    if(adcToggle){
-        // Start the conversion.
-        ADCSRA |= (1 << ADSC);
-        // Wait for the conversion to complete.
-        while(ADCSRA & (1 << ADSC));
-        
-        // Read the value.
-        uint16_t value = ADC;
-        int voltage = (value * 5) / 1024; // Convert the value to a 5V scale.
-        uartPutString("ADC Value: ");
-        uartPutInt(voltage);
-        uartPutChar('\n');
-    }
+        // Read the ADC value.
+        uint16_t adcValue = ADC;
+        ledAdcValue(adcValue);
+        adcConvert(); // Start the next conversion.
 };
 
-void adcEnabled() {
-    adcToggle = !adcToggle;
-};  
+void adcConvert() {
+    // Start the ADC-Conversion.
+    ADCSRA |= (1 << ADSC);
+};

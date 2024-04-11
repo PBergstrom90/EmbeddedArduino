@@ -5,10 +5,11 @@
 #include <avr/io.h>
 
 extern volatile bool adcToggle;
+
 void setup();
 void buttonPressed();
 void adcInit();
 void adcRead();
-void adcEnabled();
+void adcConvert();
 
 #endif // DEVICE_H

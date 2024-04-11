@@ -35,8 +35,8 @@ enum Command parseCommand(const char* input) {
         return LED_TOGGLE;
     } else if (strncmp(input, "ledpower", strlen("ledpower")) == 0) {
         return LED_POWER_VALUE;
-    } else if (strncmp(input, "timertoggle", strlen("timertoggle")) == 0) {
-        return TIMER_TOGGLE;
+    } else if (strncmp(input, "ledtimertoggle", strlen("ledtimertoggle")) == 0) {
+        return LED_TIMER_TOGGLE;
     } else if (strncmp(input, "adctoggle", strlen("adctoggle")) == 0) {
         return ADC_TOGGLE;
     } else if (strncmp(input, "exit", strlen("exit")) == 0) {
@@ -60,17 +60,16 @@ void executeCommand(enum Command cmd, short value) {
                 uartPutChar('\n');
             }
             break;
-        case TIMER_TOGGLE:
-            timer1Enabled = !timer1Enabled;
-            uartPutString("Timer 1 is: ");
-            uartPutString(adcToggle ? "enabled." : "disabled.");
+        case LED_TIMER_TOGGLE:
+            ledTimer = !ledTimer;
+            uartPutString("LED Timer is: ");
+            uartPutString(ledTimer ? "Enabled." : "Disabled.");
             uartPutChar('\n');
             break;
         case ADC_TOGGLE:
-            timer2Enabled = !timer2Enabled;
             adcToggle = !adcToggle;
             uartPutString("ADC is: ");
-            uartPutString(timer2Enabled ? "enabled." : "disabled.");
+            uartPutString(adcToggle ? "Enabled." : "Disabled.");
             uartPutChar('\n');
             break;
         case EXIT:

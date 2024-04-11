@@ -9,10 +9,6 @@
 #include "menu.h"
 #include "device.h"
 
-volatile bool timer1Enabled = false;
-volatile bool timer2Enabled = false;
-volatile uint16_t timer2Counter = 0;
-
 // 16-bit timer.
 void timer1Init() {
     TCCR1A = 0; // Set default values
@@ -23,28 +19,19 @@ void timer1Init() {
     TIMSK1 |= (1 << OCIE1A); // Enable compare match interrupt.
 };
 
-// 8-bit timer.
 void timer2Init() {
     TCCR2A = 0; // Set default values
     TCCR2B = 0;
-    TCCR2B |= (1 << WGM22); // Enable CTC mode (Clear Timer on Compare Match).
-    TCCR2B |= (1 << CS22) | (1 << CS21); // Enable CS22 for Prescaler 256.
-    OCR2A = 156; // Timer counter value for 10ms compare match (16Mhz/256/100Hz).
-    TIMSK2 |= (1 << OCIE2A); // Enable compare match interrupt.
+    // Enable Fast PWM mode
+    TCCR2A |= (1 << WGM20) | (1 << WGM21);
+    // Set non-inverting mode on OC2B
+    TCCR2A |= (1 << COM2B1);
+    TCCR2B |= (1 << CS22); // Enable CS22 for Prescaler 64.
+    OCR2B = 0; // Set the duty cycle to 0.
 };
 
 ISR(TIMER1_COMPA_vect) {
-    if(timer1Enabled) {
+    if(ledTimer) {
         ledToggle();
-    }
-}
-
-ISR(TIMER2_COMPA_vect) {
-    timer2Counter++;
-    if(timer2Counter >= 100) { // 100 * 10ms = 1s
-        if(timer2Enabled) {
-            adcRead();
-        }
-        timer2Counter = 0;
     }
 }

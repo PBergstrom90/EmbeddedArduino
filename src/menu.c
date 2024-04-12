@@ -29,7 +29,7 @@ void mainMenu() {
         }
         previousButtonState = currentButtonState;
 
-        if(adcToggle){
+        if(adcReadState){
             adcRead();
         }
 

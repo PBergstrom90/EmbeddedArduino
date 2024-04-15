@@ -1,18 +1,20 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
-#define MAX_INPUT_LENGTH 20
+#define MAX_INPUT_LENGTH 25
 
 enum Command {
     LED_TOGGLE,
     LED_POWER_VALUE,
-    TIMER_TOGGLE,
+    LED_TIMER_TOGGLE,
+    ADC_TOGGLE,
+    SET_PRESCALER,
     EXIT,
     INVALID_COMMAND
 };
 
 enum Command parseCommand(const char* input);
-void parseUserInput(char inputString[30]);
+void parseUserInput(const char *inputString);
 void executeCommand(enum Command cmd, short int value);
 
 #endif // COMMAND_H 

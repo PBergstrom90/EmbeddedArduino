@@ -1,7 +1,13 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include <avr/io.h>
 #include "serial.h"
 #include "led.h"
+#include "device.h"
+#include "timer.h"
+#include "menu.h"
+#include "command.h"
+#include "adc.h"
 
 void uartInit(unsigned int ubrr) {
     // Set baud rate.
@@ -13,12 +19,42 @@ void uartInit(unsigned int ubrr) {
     UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);
 };
 
+void uartLoop(char *inputString) {
+    if (uartDataAvailable()) {
+        uartRecStringAndEcho(inputString);
+        uartPutChar('\n');
+        uartPutString("Received: ");
+        uartPutString(inputString);
+        uartPutChar('\n');
+        parseUserInput(inputString);
+    }
+
+}
+
+bool uartDataAvailable() {
+    // UCSR0A is used here to check the UART Receive Complete (RXC0) bit. 
+    // This bit indicates whether there is data available in the UART receive buffer.
+    return UCSR0A & (1 << RXC0);
+};
+
 void uartPutChar(const char c) {
     // UCSR0A is the UART Control and Status Register A. The UDRE0 bit indicates whether,
     // the UART Data Register (UDR0) is empty and ready to transmit a new byte.
     while(!(UCSR0A & (1 << UDRE0))); // Wait for empty transmit buffer.
     UDR0 = c; // Transmit character.
 };
+
+void uartPutInt(int i) {
+    char buffer[10];
+    sprintf(buffer, "%d", i);
+    uartPutString(buffer);
+};
+
+void uartPutFloat(float f) {
+    char buffer[10];
+    sprintf(buffer, "%.2f", f);
+    uartPutString(buffer);
+};  
 
 void uartPutString(const char *s) {
     // Iterate over each character, received from the pointer.
@@ -37,13 +73,20 @@ char uartGetChar() {
 
 // This function is combined with the previous "uartEcho"-function, to minimise disturbance when receiving data.
 void uartRecStringAndEcho(char *s) {
-    // Read characters until a newline character is received.
+    uint8_t bufferCounter = 0; // Counter for the buffer.
+
     char receivedChar = uartGetChar();
-    while(receivedChar != '\n') {
+    while(receivedChar != '\n' && bufferCounter < MAX_INPUT_LENGTH - 1) {
         *s = receivedChar;
         uartPutChar(receivedChar); // Echo received character.
         s++;
+        bufferCounter++;
         receivedChar = uartGetChar();
     }
     *s = '\0'; // Null-terminate the string
+    
+    if(bufferCounter == MAX_INPUT_LENGTH - 1) {
+        uartPutChar('\n');
+        uartPutString("ERROR: Input exceeds maximum allowed characters.");
+    }
 };

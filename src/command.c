@@ -9,6 +9,7 @@
 #include "menu.h"
 #include "timer.h"
 #include "device.h"
+#include "adc.h"
 
 void parseUserInput(const char *inputString) { 
     if (strlen(inputString) > MAX_INPUT_LENGTH) {
@@ -39,8 +40,6 @@ enum Command parseCommand(const char* input) {
         return LED_TIMER_TOGGLE;
     } else if (strncmp(input, "adctoggle", strlen("adctoggle")) == 0) {
         return ADC_TOGGLE;
-    } else if (strncmp(input, "adcprint", strlen("adcprint")) == 0) {
-        return ADC_PRINT;
     } else if (strncmp(input, "setprescaler", strlen("setprescaler")) == 0) {
         return SET_PRESCALER;
     } else if (strncmp(input, "exit", strlen("exit")) == 0) {
@@ -76,12 +75,6 @@ void executeCommand(enum Command cmd, short int value) {
             uartPutString(adcToggle ? "Enabled." : "Disabled.");
             uartPutChar('\n');
             break;
-        case ADC_PRINT:
-            adcPrintState = !adcPrintState;
-            uartPutString("ADC Print is: ");
-            uartPutString(adcPrintState ? "Enabled." : "Disabled.");
-            uartPutChar('\n');
-            break;  
         case SET_PRESCALER:
             switchPrescaler(value);
             uartPutString("Prescaler set to: ");
@@ -89,6 +82,7 @@ void executeCommand(enum Command cmd, short int value) {
             uartPutChar('\n');
             break;
         case EXIT:
+            uartPutChar('\n');
             uartPutString("Exiting program... ");
             uartPutChar('\n');
             isRunning = false;

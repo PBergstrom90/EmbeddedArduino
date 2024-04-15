@@ -8,47 +8,57 @@
 #include "command.h"
 #include "menu.h"
 #include "device.h"
+#include "adc.h"
 
-// 16-bit timer.
+// 16-bit timer. Used to adjust the LED-toggle frequency.
 void timer1Init() {
     TCCR1A = 0; // Set default values
     TCCR1B = 0;
-    TCCR1A |= (1 << WGM11) | (1 << WGM10); // Enable Fast PWM mode, TOP is ICR1.
+    TCCR1A |= (1 << WGM11) | (1 << WGM10); // Enable Fast PWM mode.
     TCCR1B |= (1 << WGM12) | (1 << WGM13); // Enable CTC mode (Clear Timer on Compare Match).
     TCCR1B |= (1 << CS12) | (1 << CS10); // Enable CS12 and CS10 for Prescaler 1024.
-    ICR1 = 15652; // Timer counter value for 1 second overflow (16Mhz/1024/1Hz).
     OCR1A = 3125; // Timer counter value for 200ms compare match (16Mhz/1024/5Hz).
-    OCR1B = 1563; // Timer counter value for 100ms compare match B (16Mhz/1024/10Hz).
     TIMSK1 |= (1 << OCIE1A); // Enable compare match interrupt.
-    TIMSK1 |= (1 << OCIE1B); // Enable compare match interrupt B.
-    TIMSK1 |= (1 << TOIE1); // Enable overflow interrupt.  
 };
 
+// 8-bit timer. Used to count seconds for the ADC-printout.
+void timer2Init() {
+    TCCR2B |= (1 << CS22) | (1 << CS21) | (1 << CS20); // Set prescaler to 1024.
+    TIMSK2 |= (1 << TOIE2); // Enable overflow interrupt.
+};
+
+// Adjustable delay from adcRead();
 ISR(TIMER1_COMPA_vect) {
-    // Enable and disable the LED toggle-timer.
     if(ledTimer) {
         ledToggle();
     }
 };
 
-ISR(TIMER1_COMPB_vect) {
-    // Enable and disable the ADC read state.
-    if(adcToggle) {
+ISR(TIMER2_OVF_vect) {
+    // Rough 1 second delay.
+    static uint16_t count = 0;
+    count++;
+    if (count >= 61) { // Approximately 1 second (16MHz/1024/256 = 61.035 Hz).
+        adcPrintState = true;
+        count = 0;
+    }
+}
+
+// Interrupt when ADC-conversion is complete.
+ISR(ADC_vect) {
+    if(adcToggle){
         adcReadState = true;
-    } else if (!adcToggle) {
+    } else {
         adcReadState = false;
     }
-};
+}
 
-ISR(TIMER1_OVF_vect) {
-    // Write ADC value to serial monitor every 1 second. Trigger the printstate to signal adc print.
-    adcPrintState = true;
-};
-
+// Switch the compare match value for the timer to increase/decrease LED toggle frequency.
 void switchTimerValue(uint32_t timerValue) {
     OCR1A = timerValue; // Set the new compare match value.
 };
 
+// Switch the prescaler for the timer, if necessary.
 void switchPrescaler(uint16_t prescaler) {
     cli(); // Disable interrupts.
     TCCR1B &= ~((1 << CS10) | (1 << CS11) | (1 << CS12)); // Stop the timer.

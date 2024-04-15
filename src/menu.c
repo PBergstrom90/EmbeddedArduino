@@ -8,6 +8,7 @@
 #include "command.h"
 #include "led.h"
 #include "device.h"
+#include "adc.h"
 
 bool isRunning = true;
 
@@ -28,17 +29,9 @@ void mainMenu() {
         }
         previousButtonState = buttonPressed;
 
-        if(adcReadState){
-            adcRead();
-        }
-
-        if (uartDataAvailable()) {
-            uartRecStringAndEcho(inputString);
-            uartPutChar('\n');
-            uartPutString("Received: ");
-            uartPutString(inputString);
-            uartPutChar('\n');
-            parseUserInput(inputString);
-        }
+        // Check if the ADC is toggled, and if it is, read and print the ADC value.
+        adcLoop();
+        
+        uartLoop(inputString);
     }
 };

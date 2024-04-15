@@ -8,7 +8,6 @@ enum Command {
     LED_POWER_VALUE,
     LED_TIMER_TOGGLE,
     ADC_TOGGLE,
-    ADC_PRINT,
     SET_PRESCALER,
     EXIT,
     INVALID_COMMAND

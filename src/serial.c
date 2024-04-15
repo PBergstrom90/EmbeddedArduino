@@ -7,6 +7,7 @@
 #include "timer.h"
 #include "menu.h"
 #include "command.h"
+#include "adc.h"
 
 void uartInit(unsigned int ubrr) {
     // Set baud rate.
@@ -17,6 +18,18 @@ void uartInit(unsigned int ubrr) {
     // UART Control and Status Register C: Set frame format: 8 data, 1 stop bit.
     UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);
 };
+
+void uartLoop(char *inputString) {
+    if (uartDataAvailable()) {
+        uartRecStringAndEcho(inputString);
+        uartPutChar('\n');
+        uartPutString("Received: ");
+        uartPutString(inputString);
+        uartPutChar('\n');
+        parseUserInput(inputString);
+    }
+
+}
 
 bool uartDataAvailable() {
     // UCSR0A is used here to check the UART Receive Complete (RXC0) bit. 

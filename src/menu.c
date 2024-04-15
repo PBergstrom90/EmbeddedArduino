@@ -22,20 +22,17 @@ void mainMenu() {
     while (isRunning) {
         // In order for the LED to not toggle constantly during a buttonpress, 
         // we check the current and previous state of the button.
-        bool currentButtonState = !(PIND & (1 << BUTTON_PIN));
-        if (currentButtonState && !previousButtonState) {
-            // If button was pressed for the first time, toggle LED.
-            buttonPressed();
+        bool buttonPressed = isButtonPressed();
+        if (buttonPressed && !previousButtonState) {
+            onButtonPressed();
         }
-        previousButtonState = currentButtonState;
+        previousButtonState = buttonPressed;
 
         if(adcReadState){
             adcRead();
         }
 
-        // This condition checks the UART Receive Complete (RXC) -flag in the UART Status Register (UCSR0A),
-        // and then records the userinput, as well as echoing the chars back in the Serial Monitor. Parse userinput in command.c.
-        if (UCSR0A & (1 << RXC0)) {
+        if (uartDataAvaliable()) {
             uartRecStringAndEcho(inputString);
             uartPutChar('\n');
             uartPutString("Received: ");

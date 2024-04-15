@@ -10,9 +10,9 @@
 #include "timer.h"
 #include "device.h"
 
-void parseUserInput(char inputString[MAX_INPUT_LENGTH]) { 
+void parseUserInput(const char *inputString) { 
     if (strlen(inputString) > MAX_INPUT_LENGTH) {
-        uartPutString("ERROR: Input length exceeds maximum allowed length.");
+        uartPutString("ERROR: Input exceeds maximum allowed length.");
         uartPutChar('\n');
         return;
     }

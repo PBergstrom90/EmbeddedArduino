@@ -4,11 +4,13 @@
 // Macros for UART communication.
 #define LED_PIN 3 // PD3 (Arduino pin 3)
 #define BUTTON_PIN 5 // PD5 (Arduino pin 5)
+#define BUTTON_PIN_REGISTER PIND
 #define F_CPU 16000000L // 16 MHz clock speed.
 #define BAUD 9600 // Baud rate for UART communication.
 #define UBRR F_CPU/16/BAUD-1 // Asynchronous normal mode - Page 146 ATmega328P Datasheet.
 
 void uartInit(unsigned int ubrr);
+bool uartDataAvaliable();
 void uartPutChar(char c);
 void uartPutInt(int i);
 void uartPutFloat(float f);

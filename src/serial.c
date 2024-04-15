@@ -3,6 +3,10 @@
 #include <avr/io.h>
 #include "serial.h"
 #include "led.h"
+#include "device.h"
+#include "timer.h"
+#include "menu.h"
+#include "command.h"
 
 void uartInit(unsigned int ubrr) {
     // Set baud rate.
@@ -12,6 +16,12 @@ void uartInit(unsigned int ubrr) {
     UCSR0B = (1 << RXEN0) | (1 << TXEN0); 
     // UART Control and Status Register C: Set frame format: 8 data, 1 stop bit.
     UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);
+};
+
+bool uartDataAvailable() {
+    // UCSR0A is used here to check the UART Receive Complete (RXC0) bit. 
+    // This bit indicates whether there is data available in the UART receive buffer.
+    return UCSR0A & (1 << RXC0);
 };
 
 void uartPutChar(const char c) {
@@ -50,13 +60,20 @@ char uartGetChar() {
 
 // This function is combined with the previous "uartEcho"-function, to minimise disturbance when receiving data.
 void uartRecStringAndEcho(char *s) {
-    // Read characters until a newline character is received.
+    uint8_t bufferCounter = 0; // Counter for the buffer.
+
     char receivedChar = uartGetChar();
-    while(receivedChar != '\n') {
+    while(receivedChar != '\n' && bufferCounter < MAX_INPUT_LENGTH - 1) {
         *s = receivedChar;
         uartPutChar(receivedChar); // Echo received character.
         s++;
+        bufferCounter++;
         receivedChar = uartGetChar();
     }
     *s = '\0'; // Null-terminate the string
+    
+    if(bufferCounter == MAX_INPUT_LENGTH - 1) {
+        uartPutChar('\n');
+        uartPutString("ERROR: Input exceeds maximum allowed characters.");
+    }
 };

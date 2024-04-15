@@ -10,6 +10,7 @@ extern volatile bool adcPrintState;
 
 void setup();
 void buttonPressed();
+bool isButtonPressed();
 void adcInit();
 void adcRead();
 void adcPrint(uint32_t timerValue, float millivolts);

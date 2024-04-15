@@ -27,10 +27,10 @@ void setup() {
 
     uartInit(UBRR);
     timer1Init();
-    sei();
+    sei(); // Enable global interrupts.
     adcInit();
     adcConvert();
-    setupDone = true;
+    setupDone = true; // Setup is complete.
     
     if(setupDone){
         uartPutChar('\n');
@@ -44,8 +44,12 @@ void setup() {
     }
 };
 
-void buttonPressed() {
+void onButtonPressed() {
     ledToggle();
+};
+
+bool isButtonPressed() {
+    return !(BUTTON_PIN_REGISTER & (1 << BUTTON_PIN));
 };
 
 void adcInit() {

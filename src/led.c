@@ -6,6 +6,7 @@
 #include "device.h"
 #include "timer.h"
 
+bool ledOn = false;
 volatile bool ledTimer = false; 
 
 void ledToggle() {
@@ -17,14 +18,19 @@ void ledPowerValue(uint8_t value) {
     char valueString[5];
     sprintf(valueString, "%d", value);
     if(value >= MIN_POWER_VALUE && value <= 127){
-        // Turn off the LED.
-        PORTD &= ~(1 << LED_PIN);
+        setLedOn(false);
     } else if(value >= 128 && value <= MAX_POWER_VALUE){
-        // Turn on the LED.
-        PORTD |= (1 << LED_PIN);
+        setLedOn(true);
     }
-    // Print a message to the serial monitor.
     uartPutString("LED value is: ");
     uartPutString(valueString);
     uartPutChar('\n');
 };
+
+void setLedOn(bool ledOn) {
+    if(ledOn) {
+        PORTD |= (1 << LED_PIN);
+    } else {
+        PORTD &= ~(1 << LED_PIN);
+    }
+}

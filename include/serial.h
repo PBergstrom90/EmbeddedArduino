@@ -10,7 +10,7 @@
 #define UBRR F_CPU/16/BAUD-1 // Asynchronous normal mode - Page 146 ATmega328P Datasheet.
 
 void uartInit(unsigned int ubrr);
-bool uartDataAvaliable();
+bool uartDataAvailable();
 void uartPutChar(char c);
 void uartPutInt(int i);
 void uartPutFloat(float f);

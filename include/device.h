@@ -9,7 +9,7 @@ extern volatile bool adcReadState;
 extern volatile bool adcPrintState;
 
 void setup();
-void buttonPressed();
+void onButtonPressed();
 bool isButtonPressed();
 void adcInit();
 void adcRead();

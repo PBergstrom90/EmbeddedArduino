@@ -32,7 +32,7 @@ void mainMenu() {
             adcRead();
         }
 
-        if (uartDataAvaliable()) {
+        if (uartDataAvailable()) {
             uartRecStringAndEcho(inputString);
             uartPutChar('\n');
             uartPutString("Received: ");

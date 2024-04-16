@@ -21,28 +21,26 @@ void timer1Init() {
     TIMSK1 |= (1 << OCIE1A); // Enable compare match interrupt.
 };
 
-// 8-bit timer. Used to count seconds for the ADC-printout.
+// 8-bit timer. Used for PWM on the LED.
 void timer2Init() {
+    TCCR2A |= (1 << WGM21) | (1 << WGM20); // Enable Fast PWM mode.
     TCCR2B |= (1 << CS22) | (1 << CS21) | (1 << CS20); // Set prescaler to 1024.
-    TIMSK2 |= (1 << TOIE2); // Enable overflow interrupt.
-};
+    TCCR2A |= (1 << COM2A1); // Enable non-inverting mode.
+    TIMSK2 |= (1 << OCIE2A); // Enable compare match interrupt.
+}
 
-// Adjustable delay from adcRead();
+// Adjustable LED frequency-delay, controlled from adcRead();
 ISR(TIMER1_COMPA_vect) {
     if(ledTimer) {
         ledToggle();
     }
 };
 
-ISR(TIMER2_OVF_vect) {
-    // Rough 1 second delay.
-    static uint16_t count = 0;
-    count++;
-    if (count >= 61) { // Approximately 1 second (16MHz/1024/256 = 61.035 Hz).
-        adcPrintState = true;
-        count = 0;
+ISR(TIMER2_COMPA_vect) {
+    if(ledOn) {
+        setLedBrightness(currentDutyCycle);
     }
-}
+};
 
 // Interrupt when ADC-conversion is complete.
 ISR(ADC_vect) {
@@ -57,6 +55,16 @@ ISR(ADC_vect) {
 void switchTimerValue(uint32_t timerValue) {
     OCR1A = timerValue; // Set the new compare match value.
 };
+
+void adjustTimerFrequency(float frequency) {
+    cli(); // Disable interrupts
+
+    // Calculate compare value based on desired frequency
+    uint32_t timerTicks = 16000000UL / 1024 / frequency; // Corrected calculation
+    OCR1A = (uint16_t)timerTicks - 1; // Subtract 1 because Timer1 counts from 0
+
+    sei(); // Enable interrupts
+}
 
 // Switch the prescaler for the timer, if necessary.
 void switchPrescaler(uint16_t prescaler) {
@@ -84,3 +92,20 @@ void switchPrescaler(uint16_t prescaler) {
     sei(); // Enable interrupts.
     TCCR1B |= prescaler; // Restart the timer with the new prescaler.
 };
+
+/* 8-bit timer. Used to count seconds for the ADC-printout.
+void timer2Init() {
+    TCCR2B |= (1 << CS22) | (1 << CS21) | (1 << CS20); // Set prescaler to 1024.
+    TIMSK2 |= (1 << TOIE2); // Enable overflow interrupt.
+};*/
+
+/* Timer for ADC-printout. Approximately 1 second.
+ISR(TIMER2_OVF_vect) {
+    // Rough 1 second delay.
+    static uint16_t count = 0;
+    count++;
+    if (count >= 61) { // Approximately 1 second (16MHz/1024/256 = 61.035 Hz).
+        adcPrintState = true;
+        count = 0;
+    }
+} */

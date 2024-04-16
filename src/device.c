@@ -44,6 +44,7 @@ void setup() {
 
 void onButtonPressed() {
     ledToggle();
+    _delay_ms(100);
 };
 
 bool isButtonPressed() {

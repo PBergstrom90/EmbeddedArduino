@@ -33,7 +33,7 @@ void ledPowerValue(uint8_t value, uint16_t timeMs) {
     adjustTimerFrequency(frequency);
     
     // Set PWM duty cycle.
-    value = currentDutyCycle;
+    currentDutyCycle = value;
     
     uartPutString("LED powervalue is: ");
     uartPutString(valueString);

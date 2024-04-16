@@ -25,20 +25,13 @@ void timer1Init() {
 void timer2Init() {
     TCCR2A |= (1 << WGM21) | (1 << WGM20); // Enable Fast PWM mode.
     TCCR2B |= (1 << CS22) | (1 << CS21) | (1 << CS20); // Set prescaler to 1024.
-    TCCR2A |= (1 << COM2A1); // Enable non-inverting mode.
-    TIMSK2 |= (1 << OCIE2A); // Enable compare match interrupt.
+    TCCR2B |= (1 << COM2B1); // Enable non-inverting mode.
 }
 
 // Adjustable LED frequency-delay, controlled from adcRead();
 ISR(TIMER1_COMPA_vect) {
     if(ledTimer) {
         ledToggle();
-    }
-};
-
-ISR(TIMER2_COMPA_vect) {
-    if(ledOn) {
-        setLedBrightness(currentDutyCycle);
     }
 };
 
@@ -58,11 +51,9 @@ void switchTimerValue(uint32_t timerValue) {
 
 void adjustTimerFrequency(float frequency) {
     cli(); // Disable interrupts
-
     // Calculate compare value based on desired frequency
     uint32_t timerTicks = 16000000UL / 1024 / frequency; // Corrected calculation
     OCR1A = (uint16_t)timerTicks - 1; // Subtract 1 because Timer1 counts from 0
-
     sei(); // Enable interrupts
 }
 

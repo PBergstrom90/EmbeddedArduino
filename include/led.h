@@ -4,19 +4,24 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+// LED macros
+#define LED_PIN PD3 // (Arduino pin 3)
 #define LED_ON PORTD |= (1 << LED_PIN)
 #define LED_OFF PORTD &= ~(1 << LED_PIN)
 #define LED_TOGGLE PORTD ^= (1 << LED_PIN)
+#define LED_PWM_PIN OCR2B
+
+// PWM macros
 #define MIN_POWER_VALUE 0
 #define MAX_POWER_VALUE 255
 
 extern bool ledOn;
 extern volatile bool ledTimer;  
-extern volatile uint8_t currentDutyCycle;
+extern volatile uint8_t currentPwmValue;
 
 void ledToggle();
-void setLedBrightness(uint8_t dutyCycle);
-void ledPowerValue(uint8_t value, uint16_t timeMs);
+void setLedBrightness(uint8_t pwmValue);
+void ledPowerValue(uint8_t pwmValue, uint16_t timeMs);
 void setLedOn(bool ledOn);
 
 #endif // _LED_H_

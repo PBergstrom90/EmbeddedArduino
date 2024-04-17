@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "led.h": "c",
-        "io.h": "c"
+        "io.h": "c",
+        "arduino.h": "c"
     }
 }

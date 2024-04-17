@@ -11,10 +11,10 @@
 #include "adc.h"
 
 int main() {
-    
+
     setup();
     mainMenu();
-    
+
     uartPutString("--- DEVICE OFFLINE ---");
     uartPutChar('\n');
     

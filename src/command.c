@@ -73,9 +73,9 @@ void executeCommand(enum Command cmd, short int value, short int timeMs) {
             break;
         case LED_BRIGHTNESS_CMD:
             if(value >= MIN_POWER_VALUE && value <= MAX_POWER_VALUE) {
-                currentDutyCycle = value;
+                setLedBrightness(value);
                 uartPutString("LED brightness is set to: ");
-                uartPutChar(value);
+                uartPutInt(value);
                 uartPutChar('\n');
             } else {
                 uartPutString("ERROR: Invalid LED BRIGHTNESS value.");

@@ -28,7 +28,6 @@ void uartLoop(char *inputString) {
         uartPutChar('\n');
         parseUserInput(inputString);
     }
-
 }
 
 bool uartDataAvailable() {

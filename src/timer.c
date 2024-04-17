@@ -14,7 +14,7 @@
 void timer1Init() {
     TCCR1A = 0; // Set default values
     TCCR1B = 0;
-    TCCR1A |= (1 << WGM11) | (1 << WGM10); // Enable Fast PWM mode.
+    TCCR1A |= (1 << WGM11) | (1 << WGM10); // Enable Fast PWM mode, 10-bit.
     TCCR1B |= (1 << WGM12) | (1 << WGM13); // Enable CTC mode (Clear Timer on Compare Match).
     TCCR1B |= (1 << CS12) | (1 << CS10); // Enable CS12 and CS10 for Prescaler 1024.
     OCR1A = 3125; // Timer counter value for 200ms compare match (16Mhz/1024/5Hz).
@@ -24,9 +24,11 @@ void timer1Init() {
 // 8-bit timer. Used for PWM on the LED.
 void timer2Init() {
     TCCR2A |= (1 << WGM21) | (1 << WGM20); // Enable Fast PWM mode.
-    TCCR2B |= (1 << CS22) | (1 << CS21) | (1 << CS20); // Set prescaler to 1024.
-    TCCR2B |= (1 << COM2B1); // Enable non-inverting mode.
-}
+    TCCR2B |= (1 << CS22); // Set prescaler to 64.
+    TCCR2A |= (1 << COM2B1); // The COM2B1 control the PWM of the digital pin 3.
+    OCR2A = 255; // Set the top value for the timer.
+    OCR2B = 0; // Set the duty cycle to 0.
+};
 
 // Adjustable LED frequency-delay, controlled from adcRead();
 ISR(TIMER1_COMPA_vect) {

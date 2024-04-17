@@ -9,31 +9,32 @@
 
 bool ledOn = false;
 volatile bool ledTimer = false;
-volatile uint8_t currentDutyCycle = 0;
+volatile uint8_t currentPwmValue = 0;
 
 void ledToggle() {
-    LED_TOGGLE;
+    ledOn = !ledOn; // Toggle LED state
+    setLedOn(ledOn);
+}
+
+void setLedBrightness(uint8_t pwmValue) {
+    LED_PWM_PIN = pwmValue;  // Using Timer2 for PWM.
+    currentPwmValue = pwmValue; // Set the current PWM value
 };
 
-void setLedBrightness(uint8_t dutyCycle) {
-    OCR2A = dutyCycle;  // Using Timer2 for PWM.
-};
-
-void ledPowerValue(uint8_t value, uint16_t timeMs) {
+void ledPowerValue(uint8_t pwmValue, uint16_t timeMs) {
     // Convert integer to string.
     char valueString[5];
     char timeString[5];
-    sprintf(valueString, "%d", value);
+    sprintf(valueString, "%d", pwmValue);
     sprintf(timeString, "%d", timeMs);
 
     // Calculate frequency from timeMs
     float frequency = 1.0 / (timeMs / 1000.0); // Convert timeMs to frequency in Hz
-    
-    // Adjust timer frequency
-    adjustTimerFrequency(frequency);
-    
-    // Set PWM duty cycle.
-    currentDutyCycle = value;
+
+    pwmValue = currentPwmValue; // Set the current PWM value
+    adjustTimerFrequency(frequency); // Adjust timer frequency
+
+    setLedBrightness(currentPwmValue); // Set PWM duty cycle.
     
     uartPutString("LED powervalue is: ");
     uartPutString(valueString);
@@ -43,10 +44,18 @@ void ledPowerValue(uint8_t value, uint16_t timeMs) {
     uartPutChar('\n');
 }
 
+void pwmLedOn() { 
+    LED_PWM_PIN = currentPwmValue;
+}
+
+void pwmLedOff() {
+    LED_PWM_PIN = 0;
+}
+
 void setLedOn(bool ledOn) {
     if(ledOn) {
-        LED_ON;
+        pwmLedOn();
     } else {
-        LED_OFF;
+        pwmLedOff();
     }
 };

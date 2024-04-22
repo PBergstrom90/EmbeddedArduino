@@ -5,9 +5,10 @@
 #define F_CPU 16000000L // 16 MHz clock speed.
 #define BAUD 9600 // Baud rate for UART communication.
 #define UBRR F_CPU/16/BAUD-1 // Asynchronous normal mode - Page 146 ATmega328P Datasheet.
+#define RX_BUF_SIZE 64 // Buffer length for UART communication.
 
 void uartInit(unsigned int ubrr);
-void uartLoop(char *inputString);   
+void uartLoop();   
 bool uartDataAvailable();
 void uartPutChar(char c);
 void uartPutInt(int i);

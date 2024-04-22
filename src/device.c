@@ -13,7 +13,6 @@
 
 void setup() {
     bool setupDone = false;    
-    
     // Set LED pin as output.
     DDRD |= (1 << LED_PIN);
     // Set Button pin as input.
@@ -25,11 +24,10 @@ void setup() {
     uartInit(UBRR);
     timer1Init();
     timer2Init();
-    adcInit();
+    // adcInit(); // - NOT IN USE FOR "DELUPPGIFT03"
     sei(); // Enable global interrupts.
-    adcConvert();
+    // adcConvert(); // - NOT IN USE FOR "DELUPPGIFT03"
     setupDone = true; // Setup is complete.
-    
     if(setupDone){
         uartPutChar('\n');
         uartPutString("--- SETUP COMPLETE ---");
@@ -43,7 +41,12 @@ void setup() {
 };
 
 void onButtonPressed() {
-    ledToggle();
+    ledOn = !ledOn; // Toggle LED boolean.
+    if(ledOn) {
+        setLedBrightness(MAX_POWER_VALUE);
+    } else {
+        setLedBrightness(MIN_POWER_VALUE);
+    }
     _delay_ms(100);
 };
 

@@ -9,14 +9,17 @@
 #define LED_ON PORTD |= (1 << LED_PIN)
 #define LED_OFF PORTD &= ~(1 << LED_PIN)
 #define LED_TOGGLE PORTD ^= (1 << LED_PIN)
-#define LED_PWM_PIN OCR2B
+#define LED_PWM_VALUE OCR2B
 
 // PWM macros
 #define MIN_POWER_VALUE 0
 #define MAX_POWER_VALUE 255
 
+// String buffersize
+#define PRINTOUT_RANGE 5
+
 extern bool ledOn;
-extern volatile bool ledTimer;  
+extern volatile bool ledTimerOn;  
 extern volatile uint8_t currentPwmValue;
 
 void ledToggle();

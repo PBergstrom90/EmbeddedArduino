@@ -12,12 +12,12 @@
 #include "adc.h"
 
 void parseUserInput(const char *inputString) { 
-    if (strlen(inputString) > MAX_INPUT_LENGTH) {
+    if (strlen(inputString) > RX_BUF_SIZE) {
         uartPutString("ERROR: Input exceeds maximum allowed length.");
         uartPutChar('\n');
         return;
     }
-    char command[MAX_INPUT_LENGTH];
+    char command[RX_BUF_SIZE];
     short int value;
     short int timeMs;
     // Use sscanf to parse the input string
@@ -66,9 +66,9 @@ void executeCommand(enum Command cmd, short int value, short int timeMs) {
             }
             break;
         case LED_TIMER_TOGGLE_CMD:
-            ledTimer = !ledTimer;
+            ledTimerOn = !ledTimerOn;
             uartPutString("LED Timer is: ");
-            uartPutString(ledTimer ? "Enabled." : "Disabled.");
+            uartPutString(ledTimerOn ? "Enabled." : "Disabled.");
             uartPutChar('\n');
             break;
         case LED_BRIGHTNESS_CMD:

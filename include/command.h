@@ -1,8 +1,6 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
-#define MAX_INPUT_LENGTH 25
-
 enum Command {
     LED_TOGGLE_CMD,
     LED_POWER_VALUE_CMD,

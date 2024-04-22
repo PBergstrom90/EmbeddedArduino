@@ -61,7 +61,7 @@ float adcRead() {
     } else if (millivolts < 5000){
         timerValue = 1562; // 100 ms.
     }
-    switchTimerValue(timerValue);
+    switchTimer1Value(timerValue);
     return millivolts;
 };
 

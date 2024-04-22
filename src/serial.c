@@ -19,7 +19,8 @@ void uartInit(unsigned int ubrr) {
     UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);
 };
 
-void uartLoop(char *inputString) {
+void uartLoop() {
+    char inputString[RX_BUF_SIZE];
     if (uartDataAvailable()) {
         uartRecStringAndEcho(inputString);
         uartPutChar('\n');
@@ -44,13 +45,13 @@ void uartPutChar(const char c) {
 };
 
 void uartPutInt(int i) {
-    char buffer[10];
+    char buffer[PRINTOUT_RANGE];
     sprintf(buffer, "%d", i);
     uartPutString(buffer);
 };
 
 void uartPutFloat(float f) {
-    char buffer[10];
+    char buffer[PRINTOUT_RANGE];
     sprintf(buffer, "%.2f", f);
     uartPutString(buffer);
 };  
@@ -73,9 +74,8 @@ char uartGetChar() {
 // This function is combined with the previous "uartEcho"-function, to minimise disturbance when receiving data.
 void uartRecStringAndEcho(char *s) {
     uint8_t bufferCounter = 0; // Counter for the buffer.
-
     char receivedChar = uartGetChar();
-    while(receivedChar != '\n' && bufferCounter < MAX_INPUT_LENGTH - 1) {
+    while(receivedChar != '\n' && bufferCounter < RX_BUF_SIZE - 1) {
         *s = receivedChar;
         uartPutChar(receivedChar); // Echo received character.
         s++;
@@ -84,7 +84,7 @@ void uartRecStringAndEcho(char *s) {
     }
     *s = '\0'; // Null-terminate the string
     
-    if(bufferCounter == MAX_INPUT_LENGTH - 1) {
+    if(bufferCounter == RX_BUF_SIZE - 1) {
         uartPutChar('\n');
         uartPutString("ERROR: Input exceeds maximum allowed characters.");
     }

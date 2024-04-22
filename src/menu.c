@@ -16,7 +16,7 @@ void mainMenu() {
     bool previousButtonState = false;
     uartPutString("--- DEVICE ONLINE ---");
     uartPutChar('\n');
-    uartPutString("Submit 'ledtoggle', 'ledtimertoggle', 'ledbrightness <0-255>' or 'ledpower <0-255> <200-5000' command, and press 'Enter'.");  
+    uartPutString("Submit 'ledtoggle', 'ledtimertoggle', 'ledbrightness <0-255>', 'ledpower <0-255> <200-5000>' or 'buttoncounter' command, and press 'Enter'.");  
     uartPutChar('\n');
     while (isRunning) {
         // In order for the LED to not toggle constantly during a buttonpress, 
@@ -27,8 +27,11 @@ void mainMenu() {
         }
         previousButtonState = buttonPressed;
 
-        // Check if the ADC is toggled, and if it is, read and print the ADC value.
-        // adcLoop(); - NOT IN USE FOR "DELUPPGIFT 3"
+        if(buttonPrint){
+            buttonCounterPrint();
+            buttonPrint = false;
+        }
+
         uartLoop();
     }
 };

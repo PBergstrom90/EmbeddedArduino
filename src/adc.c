@@ -11,6 +11,8 @@
 #include "timer.h"
 #include "menu.h"
 
+// ADC IS USED FOR DELUPPGIFT02
+
 volatile bool adcToggle = false;
 volatile bool adcReadState = false;
 volatile bool adcPrintState = false;

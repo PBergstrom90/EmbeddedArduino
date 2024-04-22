@@ -13,15 +13,31 @@
 uint16_t prescalerValue = PRESCALER_1024; // Default prescaler value.
 volatile uint16_t overflowCount = 0; // Global variable to store the number of timeroverflows.
 
+// 8-bit timer. Used for buttonCounterPrint.
+void timer0Init() {
+    TCCR0A = 0;
+    TCCR0B = 0;
+    TCCR0B |= (1 << CS02); // Set prescaler to 256.
+    TIMSK0 = (1 << TOIE0); // Enable overflow interrupt.
+}
+
+ISR(TIMER0_OVF_vect) {
+    static uint16_t count = 0;
+    count++;
+    if(count >= 255) { // Approximately 1 second.
+        count = 0;
+        if(buttonTimer){
+            buttonPrint = true;
+        }
+    }
+}
+
 // 16-bit timer. Used to adjust the LED-toggle frequency.
 void timer1Init() {
     TCCR1A = 0; // Set default values
     TCCR1B = 0;
-    TCCR1A |= (1 << WGM11) | (1 << WGM10); // Enable Fast PWM mode, 10-bit.
-    TCCR1B |= (1 << WGM12) | (1 << WGM13); // Enable CTC mode (Clear Timer on Compare Match).
-    TCCR1B |= (1 << CS12) | (1 << CS10); // Enable CS12 and CS10 for Prescaler 1024.
-    OCR1A = 3125; // Timer counter value for 200ms compare match (16Mhz/1024/5Hz).
-    TIMSK1 |= (1 << OCIE1A); // Enable compare match interrupt.
+    TCCR1B |= (1 << CS12) | (1 << CS11); // Enable CS12 and CS11 for Counter Mode.
+    BUTTON_COUNTER = 0; // Set the timer to 0.
 };
 
 // 8-bit timer. Used for PWM on the LED.
@@ -32,28 +48,6 @@ void timer2Init() {
     OCR2A = MAX_POWER_VALUE; // Set the top value for the timer.
     OCR2B = MIN_POWER_VALUE; // Set the duty cycle to 0.
 };
-
-// Adjustable LED frequency-delay.
-ISR(TIMER1_COMPA_vect) {
-    if(ledTimerOn) {
-        if(overflowCount > 0) {
-            overflowCount--;
-        }  
-        if (overflowCount == 0) {
-            // When overflowCount reaches 0, toggle the LED.
-            ledToggle();
-        }
-    }
-};
-
-// Interrupt when ADC-conversion is complete.
-ISR(ADC_vect) {
-    if(adcToggle){
-        adcReadState = true;
-    } else {
-        adcReadState = false;
-    }
-}
 
 // Switch the compare match value for the timer to increase/decrease LED toggle frequency.
 void switchTimer1Value(uint32_t timerValue) {
@@ -98,22 +92,3 @@ void switchPrescaler(uint16_t prescaler) {
     }
     sei(); // Re-enable interrupts.
 };
-
-// TIMER2 functions for ADC-printout - NOT IN USE FOR "DELUPPGIFT03"
-
-/* 8-bit timer. Used to count seconds for the ADC-printout.
-void timer2Init() {
-    TCCR2B |= (1 << CS22) | (1 << CS21) | (1 << CS20); // Set prescaler to 1024.
-    TIMSK2 |= (1 << TOIE2); // Enable overflow interrupt.
-};*/
-
-/* Timer for ADC-printout. Approximately 1 second.
-ISR(TIMER2_OVF_vect) {
-    // Rough 1 second delay.
-    static uint16_t count = 0;
-    count++;
-    if (count >= 61) { // Approximately 1 second (16MHz/1024/256 = 61.035 Hz).
-        adcPrintState = true;
-        count = 0;
-    }
-} */

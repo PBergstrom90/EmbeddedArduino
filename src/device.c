@@ -11,6 +11,10 @@
 #include "timer.h"
 #include "menu.h"
 
+int buttonCounter = 0;
+bool buttonPrint = false;
+bool buttonTimer = false;
+
 void setup() {
     bool setupDone = false;    
     // Set LED pin as output.
@@ -22,11 +26,10 @@ void setup() {
     PORTD |= (1 << BUTTON_PIN);
 
     uartInit(UBRR);
+    timer0Init();
     timer1Init();
     timer2Init();
-    // adcInit(); // - NOT IN USE FOR "DELUPPGIFT03"
     sei(); // Enable global interrupts.
-    // adcConvert(); // - NOT IN USE FOR "DELUPPGIFT03"
     setupDone = true; // Setup is complete.
     if(setupDone){
         uartPutChar('\n');
@@ -47,9 +50,14 @@ void onButtonPressed() {
     } else {
         setLedBrightness(MIN_POWER_VALUE);
     }
-    _delay_ms(100);
 };
 
 bool isButtonPressed() {
     return !(BUTTON_PIN_REGISTER & (1 << BUTTON_PIN));
+};
+
+void buttonCounterPrint() {
+    uartPutString("Buttoncounter: ");
+    uartPutInt(BUTTON_COUNTER);
+    uartPutChar('\n');
 };

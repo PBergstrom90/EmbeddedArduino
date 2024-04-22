@@ -44,6 +44,8 @@ enum Command parseCommand(const char* input) {
         return LED_BRIGHTNESS_CMD;
     } else if (strncmp(input, "adctoggle", strlen("adctoggle")) == 0) {
         return ADC_TOGGLE_CMD;
+    } else if (strncmp(input, "buttoncounter", strlen("buttoncounter")) == 0) {
+        return BUTTON_COUNTER_CMD;
     } else if (strncmp(input, "exit", strlen("exit")) == 0) {
         return EXIT_CMD;
     }
@@ -86,6 +88,12 @@ void executeCommand(enum Command cmd, short int value, short int timeMs) {
             adcToggle = !adcToggle;
             uartPutString("ADC is: ");
             uartPutString(adcToggle ? "Enabled." : "Disabled.");
+            uartPutChar('\n');
+            break;
+        case BUTTON_COUNTER_CMD:
+            buttonTimer = !buttonTimer;
+            uartPutString("Buttoncounter is: ");
+            uartPutString(buttonTimer ? "Enabled." : "Disabled.");
             uartPutChar('\n');
             break;
         case EXIT_CMD:

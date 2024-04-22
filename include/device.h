@@ -7,8 +7,13 @@
 #define BUTTON_PIN 5 // PD5 (Arduino pin 5)
 #define BUTTON_PIN_REGISTER PIND // PIND register
 
+extern int buttonCounter;
+extern bool buttonPrint;
+extern bool buttonTimer;
+
 void setup();
 void onButtonPressed();
 bool isButtonPressed();
+void buttonCounterPrint();
 
 #endif // DEVICE_H

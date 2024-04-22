@@ -4,6 +4,9 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+// Timer values
+#define BUTTON_COUNTER TCNT1
+
 // LED-timer values
 #define MIN_TIME_MS 200
 #define MAX_TIME_MS 5000
@@ -22,6 +25,7 @@
 extern uint16_t prescalerValue;
 extern volatile uint16_t overflowCount;
 
+void timer0Init();
 void timer1Init();
 void timer2Init();
 void switchTimer1Value(uint32_t timerValue);

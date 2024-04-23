@@ -9,17 +9,15 @@
 #include "menu.h"
 #include "device.h"
 
-volatile uint16_t overflowCount = 0; // Global variable to store the number of timeroverflows.
-
 // 8-bit timer. Used for buttonCounterPrint.
 void timer0Init() {
-    TCCR0A = 0;
+    TCCR0A = 0; // Set default values
     TCCR0B = 0;
     TCCR0B |= (1 << CS02); // Set prescaler to 256.
     TIMSK0 = (1 << TOIE0); // Enable overflow interrupt.
 };
 
-// 16-bit timer. Used to adjust the LED-toggle frequency.
+// 16-bit timer. Used to keep track of the buttoncounter.
 void timer1Init() {
     TCCR1A = 0; // Set default values
     TCCR1B = 0;
@@ -27,7 +25,8 @@ void timer1Init() {
     BUTTON_COUNTER = 0; // Set the timer to 0.
 };
 
-// Used for timing the buttonCounterPrint-function.
+// Used for timing the buttonCounterPrint-function. 
+// Not the best solution, since it clutters the interrupt. But it works for now.
 ISR(TIMER0_OVF_vect) {
     static uint16_t count = 0;
     count++;

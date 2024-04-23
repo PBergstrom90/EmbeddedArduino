@@ -6,7 +6,7 @@
 
 #define BUTTON_PIN 5 // PD5 (Arduino pin 5)
 #define BUTTON_PIN_REGISTER PIND // PIND register
-#define DEBOUNCE_DELAY 15 
+#define DEBOUNCE_DELAY 75 // Debounce delay in milliseconds, according to calculations from: https://protological.com/debounce-calaculator/
 
 enum ButtonState {
     BUTTON_RELEASED,

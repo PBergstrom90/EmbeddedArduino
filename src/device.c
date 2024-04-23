@@ -59,30 +59,37 @@ void buttonCounterPrint() {
     uartPutInt(BUTTON_COUNTER);
     uartPutChar('\n');
 };
-
+ 
+// This following solution is not perfect, since it is using the inbuilt "_delay_ms" function and therefore is blocking the rest of the program.
+// But I have connected a 10uF capacitor to the button, wich makes the bounce noise less significant.
+// The delay is set to 75 ms, since anything shorter should be within the bounce time, according to this calculator: https://protological.com/debounce-calaculator/
+// This solution is good enough for this project.
 enum ButtonState buttonDebounce(enum ButtonState btnState) {
     bool currentButtonState = isButtonPressed();
-
     switch (btnState) {
         case BUTTON_RELEASED:
             if (currentButtonState) {
                 btnState = BUTTON_DEBOUNCING;
             }
             break;
-
         case BUTTON_PRESSED:
             if (!currentButtonState) {
                 btnState = BUTTON_DEBOUNCING;
             }
             break;
-
         case BUTTON_DEBOUNCING:
             _delay_ms(DEBOUNCE_DELAY);
-                if (currentButtonState && (BUTTON_PIN_REGISTER & (1 << BUTTON_PIN))) {
+            // Check if the button state is stable after the delay
+            if (currentButtonState == isButtonPressed()) {
+                // If the button is pressed after the delay, update the state
+                if (currentButtonState) {
                     btnState = BUTTON_PRESSED;
-                } else if (!currentButtonState && !(BUTTON_PIN_REGISTER & (1 << BUTTON_PIN))) {
+                } 
+                // If the button is released after the delay, update the state
+                else {
                     btnState = BUTTON_RELEASED;
                 }
+            }
             break;
     }
     return btnState;

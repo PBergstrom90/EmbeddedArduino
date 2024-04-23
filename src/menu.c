@@ -18,13 +18,15 @@ void mainMenu() {
     uartPutChar('\n');
     enum ButtonState buttonState = BUTTON_RELEASED;
     bool previousButtonState = false;
+    // DRIVER CODE
     while (isRunning) {
         buttonState = buttonDebounce(buttonState);
         if (buttonState == BUTTON_PRESSED && !previousButtonState) {
             onButtonPressed();
         }
         previousButtonState = (buttonState == BUTTON_PRESSED);
-
+        
+        // Print the buttoncounter value every second, with Timer0.
         if(buttonPrint){
             buttonCounterPrint();
             buttonPrint = false;

@@ -8,7 +8,6 @@
 #include "command.h"
 #include "led.h"
 #include "device.h"
-#include "adc.h"
 
 bool isRunning = true;
 

@@ -8,7 +8,6 @@
 #include "command.h"
 #include "menu.h"
 #include "device.h"
-#include "adc.h"
 
 uint16_t prescalerValue = PRESCALER_1024; // Default prescaler value.
 volatile uint16_t overflowCount = 0; // Global variable to store the number of timeroverflows.
@@ -48,11 +47,6 @@ void timer2Init() {
     OCR2A = MAX_POWER_VALUE; // Set the top value for the timer.
     OCR2B = MIN_POWER_VALUE; // Set the duty cycle to 0.
 };
-
-// Switch the compare match value for the timer to increase/decrease LED toggle frequency.
-void switchTimer1Value(uint32_t timerValue) {
-    OCR1A = timerValue; // Set the new compare match value.
-}; 
 
 void adjustTimerFrequency(float frequency) {
     cli(); // Disable interrupts.

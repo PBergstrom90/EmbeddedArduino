@@ -9,7 +9,6 @@
 #include "menu.h"
 #include "timer.h"
 #include "device.h"
-#include "adc.h"
 
 void parseUserInput(const char *inputString) { 
     if (strlen(inputString) > RX_BUF_SIZE) {
@@ -42,8 +41,6 @@ enum Command parseCommand(const char* input) {
         return LED_TIMER_TOGGLE_CMD;
     } else if (strncmp(input, "ledbrightness", strlen("ledbrightness")) == 0) {
         return LED_BRIGHTNESS_CMD;
-    } else if (strncmp(input, "adctoggle", strlen("adctoggle")) == 0) {
-        return ADC_TOGGLE_CMD;
     } else if (strncmp(input, "buttoncounter", strlen("buttoncounter")) == 0) {
         return BUTTON_COUNTER_CMD;
     } else if (strncmp(input, "exit", strlen("exit")) == 0) {
@@ -83,12 +80,6 @@ void executeCommand(enum Command cmd, short int value, short int timeMs) {
                 uartPutString("ERROR: Invalid LED BRIGHTNESS value.");
                 uartPutChar('\n');
             }
-            break;
-        case ADC_TOGGLE_CMD:
-            adcToggle = !adcToggle;
-            uartPutString("ADC is: ");
-            uartPutString(adcToggle ? "Enabled." : "Disabled.");
-            uartPutChar('\n');
             break;
         case BUTTON_COUNTER_CMD:
             buttonTimer = !buttonTimer;

@@ -15,7 +15,7 @@ void mainMenu() {
     bool previousButtonState = false;
     uartPutString("--- DEVICE ONLINE ---");
     uartPutChar('\n');
-    uartPutString("Submit 'ledtoggle', 'ledtimertoggle', 'ledbrightness <0-255>', 'ledpower <0-255> <200-5000>' or 'buttoncounter' command, and press 'Enter'.");  
+    uartPutString("Submit 'ledtoggle' or 'buttoncounter' command, and press 'Enter'.");  
     uartPutChar('\n');
     while (isRunning) {
         // In order for the LED to not toggle constantly during a buttonpress, 

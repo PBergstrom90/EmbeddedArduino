@@ -35,12 +35,6 @@ void parseUserInput(const char *inputString) {
 enum Command parseCommand(const char* input) {
     if (strncmp(input, "ledtoggle", strlen("ledtoggle")) == 0) {
         return LED_TOGGLE_CMD;
-    } else if (strncmp(input, "ledpower", strlen("ledpower")) == 0) {
-        return LED_POWER_VALUE_CMD;
-    } else if (strncmp(input, "ledtimertoggle", strlen("ledtimertoggle")) == 0) {
-        return LED_TIMER_TOGGLE_CMD;
-    } else if (strncmp(input, "ledbrightness", strlen("ledbrightness")) == 0) {
-        return LED_BRIGHTNESS_CMD;
     } else if (strncmp(input, "buttoncounter", strlen("buttoncounter")) == 0) {
         return BUTTON_COUNTER_CMD;
     } else if (strncmp(input, "exit", strlen("exit")) == 0) {
@@ -55,31 +49,6 @@ void executeCommand(enum Command cmd, short int value, short int timeMs) {
             ledToggle();
             uartPutString("LED is toggled.");
             uartPutChar('\n');
-            break;
-        case LED_POWER_VALUE_CMD:
-            if(value >= MIN_POWER_VALUE && value <= MAX_POWER_VALUE && timeMs >= MIN_TIME_MS && timeMs <= MAX_TIME_MS) {
-                ledPowerValue(value, timeMs);
-            } else {
-                uartPutString("ERROR: Invalid LED POWERVALUE or timeMs.");
-                uartPutChar('\n');
-            }
-            break;
-        case LED_TIMER_TOGGLE_CMD:
-            ledTimerOn = !ledTimerOn;
-            uartPutString("LED Timer is: ");
-            uartPutString(ledTimerOn ? "Enabled." : "Disabled.");
-            uartPutChar('\n');
-            break;
-        case LED_BRIGHTNESS_CMD:
-            if(value >= MIN_POWER_VALUE && value <= MAX_POWER_VALUE) {
-                setLedBrightness(value);
-                uartPutString("LED brightness is set to: ");
-                uartPutInt(value);
-                uartPutChar('\n');
-            } else {
-                uartPutString("ERROR: Invalid LED BRIGHTNESS value.");
-                uartPutChar('\n');
-            }
             break;
         case BUTTON_COUNTER_CMD:
             buttonTimer = !buttonTimer;

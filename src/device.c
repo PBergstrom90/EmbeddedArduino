@@ -27,7 +27,6 @@ void setup() {
     uartInit(UBRR);
     timer0Init();
     timer1Init();
-    timer2Init();
     sei(); // Enable global interrupts.
     setupDone = true; // Setup is complete.
     if(setupDone){
@@ -45,9 +44,9 @@ void setup() {
 void onButtonPressed() {
     ledOn = !ledOn; // Toggle LED boolean.
     if(ledOn) {
-        setLedBrightness(MAX_POWER_VALUE);
+        setLedOn(ledOn);
     } else {
-        setLedBrightness(MIN_POWER_VALUE);
+        setLedOn(!ledOn);
     }
 };
 

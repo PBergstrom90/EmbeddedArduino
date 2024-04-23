@@ -19,7 +19,7 @@ void timer0Init() {
     TCCR0B = 0;
     TCCR0B |= (1 << CS02); // Set prescaler to 256.
     TIMSK0 = (1 << TOIE0); // Enable overflow interrupt.
-}
+};
 
 ISR(TIMER0_OVF_vect) {
     static uint16_t count = 0;
@@ -30,7 +30,7 @@ ISR(TIMER0_OVF_vect) {
             buttonPrint = true;
         }
     }
-}
+};
 
 // 16-bit timer. Used to adjust the LED-toggle frequency.
 void timer1Init() {
@@ -60,7 +60,7 @@ void adjustTimerFrequency(float frequency) {
     uint32_t timerTicks = F_CPU / prescalerValue / frequency;
     OCR1A = (uint16_t)timerTicks - 1; // Subtract 1 because Timer1 counts from 0
     sei(); // Re-Enable interrupts.
-}
+};
 
 // Switch the prescaler for the timer, if necessary.
 void switchPrescaler(uint16_t prescaler) {

@@ -12,19 +12,18 @@
 bool isRunning = true;
 
 void mainMenu() {
-    bool previousButtonState = false;
     uartPutString("--- DEVICE ONLINE ---");
     uartPutChar('\n');
     uartPutString("Submit 'ledtoggle' or 'buttoncounter' command, and press 'Enter'.");  
     uartPutChar('\n');
+    enum ButtonState buttonState = BUTTON_RELEASED;
+    bool previousButtonState = false;
     while (isRunning) {
-        // In order for the LED to not toggle constantly during a buttonpress, 
-        // we check the current and previous state of the button.
-        bool buttonPressed = isButtonPressed();
-        if (buttonPressed && !previousButtonState) {
+        buttonState = buttonDebounce(buttonState);
+        if (buttonState == BUTTON_PRESSED && !previousButtonState) {
             onButtonPressed();
         }
-        previousButtonState = buttonPressed;
+        previousButtonState = (buttonState == BUTTON_PRESSED);
 
         if(buttonPrint){
             buttonCounterPrint();

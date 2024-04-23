@@ -19,6 +19,15 @@ void timer0Init() {
     TIMSK0 = (1 << TOIE0); // Enable overflow interrupt.
 };
 
+// 16-bit timer. Used to adjust the LED-toggle frequency.
+void timer1Init() {
+    TCCR1A = 0; // Set default values
+    TCCR1B = 0;
+    TCCR1B |= (1 << CS12) | (1 << CS11); // Enable CS12 and CS11 for Counter Mode.
+    BUTTON_COUNTER = 0; // Set the timer to 0.
+};
+
+// Used for timing the buttonCounterPrint-function.
 ISR(TIMER0_OVF_vect) {
     static uint16_t count = 0;
     count++;
@@ -28,12 +37,4 @@ ISR(TIMER0_OVF_vect) {
             buttonPrint = true;
         }
     }
-};
-
-// 16-bit timer. Used to adjust the LED-toggle frequency.
-void timer1Init() {
-    TCCR1A = 0; // Set default values
-    TCCR1B = 0;
-    TCCR1B |= (1 << CS12) | (1 << CS11); // Enable CS12 and CS11 for Counter Mode.
-    BUTTON_COUNTER = 0; // Set the timer to 0.
 };

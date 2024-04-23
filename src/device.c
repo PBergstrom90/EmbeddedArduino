@@ -44,9 +44,9 @@ void setup() {
 void onButtonPressed() {
     ledOn = !ledOn; // Toggle LED boolean.
     if(ledOn) {
-        setLedOn(ledOn);
+        LED_ON;
     } else {
-        setLedOn(!ledOn);
+        LED_OFF;
     }
 };
 
@@ -59,3 +59,31 @@ void buttonCounterPrint() {
     uartPutInt(BUTTON_COUNTER);
     uartPutChar('\n');
 };
+
+enum ButtonState buttonDebounce(enum ButtonState btnState) {
+    bool currentButtonState = isButtonPressed();
+
+    switch (btnState) {
+        case BUTTON_RELEASED:
+            if (currentButtonState) {
+                btnState = BUTTON_DEBOUNCING;
+            }
+            break;
+
+        case BUTTON_PRESSED:
+            if (!currentButtonState) {
+                btnState = BUTTON_DEBOUNCING;
+            }
+            break;
+
+        case BUTTON_DEBOUNCING:
+            _delay_ms(DEBOUNCE_DELAY);
+                if (currentButtonState && (BUTTON_PIN_REGISTER & (1 << BUTTON_PIN))) {
+                    btnState = BUTTON_PRESSED;
+                } else if (!currentButtonState && !(BUTTON_PIN_REGISTER & (1 << BUTTON_PIN))) {
+                    btnState = BUTTON_RELEASED;
+                }
+            break;
+    }
+    return btnState;
+}

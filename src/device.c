@@ -25,8 +25,8 @@ void setup() {
     PORTD |= (1 << BUTTON_PIN);
 
     uartInit(UBRR);
-    timer0Init();
     timer1Init();
+    timer2Init();
     sei(); // Enable global interrupts.
     setupDone = true; // Setup is complete.
     if(setupDone){

@@ -18,14 +18,11 @@ void parseUserInput(const char *inputString) {
     }
     char command[RX_BUF_SIZE];
     short int value;
-    short int timeMs;
     // Use sscanf to parse the input string
-    if (sscanf(inputString, "%s %hd %hd", command, &value, &timeMs) == 3) {
-        executeCommand(parseCommand(command), value, timeMs);
-    } else if (sscanf(inputString, "%s %hd", command, &value) == 2) {
-        executeCommand(parseCommand(command), value, -1);
+    if (sscanf(inputString, "%s %hd", command, &value) == 2) {
+        executeCommand(parseCommand(command), value);
     } else if (sscanf(inputString, "%s", command) == 1) {
-        executeCommand(parseCommand(command), -1, -1);
+        executeCommand(parseCommand(command), -1);
     } else {
         uartPutString("ERROR: Cannot parse command");
         uartPutChar('\n');
@@ -43,7 +40,7 @@ enum Command parseCommand(const char* input) {
     return INVALID_CMD;
 };
 
-void executeCommand(enum Command cmd, short int value, short int timeMs) {
+void executeCommand(enum Command cmd, short int value) {
     switch (cmd) {
         case LED_TOGGLE_CMD:
             ledToggle();

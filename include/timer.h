@@ -7,7 +7,7 @@
 // Timer values
 #define BUTTON_COUNTER TCNT1
 
-void timer0Init();
 void timer1Init();
+void timer2Init();
 
 #endif // TIMER_H

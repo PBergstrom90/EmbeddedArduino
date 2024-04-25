@@ -10,6 +10,6 @@ enum Command {
 
 enum Command parseCommand(const char* input);
 void parseUserInput(const char *inputString);
-void executeCommand(enum Command cmd, short int value, short int timeMs);
+void executeCommand(enum Command cmd, short int value);
 
 #endif // COMMAND_H 

@@ -5,7 +5,6 @@
 #include "serial.h"
 #include "device.h"
 #include "timer.h"
-#include "adc.h"
 
 bool ledOn = false;
 volatile bool ledTimerOn = false;
@@ -14,7 +13,7 @@ volatile uint8_t currentPwmValue = MIN_POWER_VALUE; // Default start-PWM value.
 void ledToggle() {
     ledOn = !ledOn; // Toggle LED boolean.
     setLedOn(ledOn);
-}
+};
 
 void setLedBrightness(uint8_t pwmValue) {
     LED_PWM_VALUE = pwmValue;  // Using Timer2 for PWM.
@@ -56,15 +55,7 @@ void ledPowerValue(uint8_t pwmValue, uint16_t timeMs) {
     uartPutString("LED timer value is: ");
     uartPutString(timeString);
     uartPutChar('\n');
-}
-
-void pwmLedOn() {
-    LED_PWM_VALUE = currentPwmValue;
-}
-
-void pwmLedOff() {
-    LED_PWM_VALUE = MIN_POWER_VALUE;
-}
+};
 
 void setLedOn(bool ledOn) {
     if(ledOn) {
@@ -72,4 +63,12 @@ void setLedOn(bool ledOn) {
     } else {
         pwmLedOff();
     }
+};
+
+void pwmLedOn() {
+    LED_PWM_VALUE = currentPwmValue;
+};
+
+void pwmLedOff() {
+    LED_PWM_VALUE = MIN_POWER_VALUE;
 };

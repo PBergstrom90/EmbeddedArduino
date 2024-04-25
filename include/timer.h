@@ -24,7 +24,6 @@ extern volatile uint16_t overflowCount;
 
 void timer1Init();
 void timer2Init();
-void switchTimer1Value(uint32_t timerValue);
 void adjustTimerFrequency(float frequency);
 void switchPrescaler(uint16_t prescaler);
 

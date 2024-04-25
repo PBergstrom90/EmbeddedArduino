@@ -4,7 +4,6 @@
 #include <avr/interrupt.h>
 #include <util/delay.h> 
 #include "device.h"
-#include "adc.h"
 #include "led.h"
 #include "command.h"
 #include "serial.h"

@@ -8,7 +8,6 @@
 #include "led.h"
 #include "serial.h"
 #include "device.h"
-#include "adc.h"
 
 int main() {
     setup();
@@ -16,4 +15,4 @@ int main() {
     uartPutString("--- DEVICE OFFLINE ---");
     uartPutChar('\n');
     return 0;
-}
+};

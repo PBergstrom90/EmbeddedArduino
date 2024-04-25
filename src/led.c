@@ -5,7 +5,6 @@
 #include "serial.h"
 #include "device.h"
 #include "timer.h"
-#include "adc.h"
 
 bool ledOn = false;
 volatile bool ledTimerOn = false;

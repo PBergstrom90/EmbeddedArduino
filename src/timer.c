@@ -8,7 +8,6 @@
 #include "command.h"
 #include "menu.h"
 #include "device.h"
-#include "adc.h"
 
 uint16_t prescalerValue = PRESCALER_1024; // Default prescaler value.
 volatile uint16_t overflowCount = 0; // Global variable to store the number of timeroverflows.
@@ -45,20 +44,6 @@ ISR(TIMER1_COMPA_vect) {
         }
     }
 };
-
-// Interrupt when ADC-conversion is complete.
-ISR(ADC_vect) {
-    if(adcToggle){
-        adcReadState = true;
-    } else {
-        adcReadState = false;
-    }
-}
-
-// Switch the compare match value for the timer to increase/decrease LED toggle frequency.
-void switchTimer1Value(uint32_t timerValue) {
-    OCR1A = timerValue; // Set the new compare match value.
-}; 
 
 void adjustTimerFrequency(float frequency) {
     cli(); // Disable interrupts.
@@ -97,23 +82,4 @@ void switchPrescaler(uint16_t prescaler) {
             break;
     }
     sei(); // Re-enable interrupts.
-};
-
-// TIMER2 functions for ADC-printout - NOT IN USE FOR "DELUPPGIFT03"
-
-/* 8-bit timer. Used to count seconds for the ADC-printout.
-void timer2Init() {
-    TCCR2B |= (1 << CS22) | (1 << CS21) | (1 << CS20); // Set prescaler to 1024.
-    TIMSK2 |= (1 << TOIE2); // Enable overflow interrupt.
-};*/
-
-/* Timer for ADC-printout. Approximately 1 second.
-ISR(TIMER2_OVF_vect) {
-    // Rough 1 second delay.
-    static uint16_t count = 0;
-    count++;
-    if (count >= 61) { // Approximately 1 second (16MHz/1024/256 = 61.035 Hz).
-        adcPrintState = true;
-        count = 0;
-    }
-} */
+}; 

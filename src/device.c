@@ -4,7 +4,6 @@
 #include <avr/interrupt.h>
 #include <util/delay.h> 
 #include "device.h"
-#include "adc.h"
 #include "led.h"
 #include "command.h"
 #include "serial.h"
@@ -24,9 +23,7 @@ void setup() {
     uartInit(UBRR);
     timer1Init();
     timer2Init();
-    // adcInit(); // - NOT IN USE FOR "DELUPPGIFT03"
     sei(); // Enable global interrupts.
-    // adcConvert(); // - NOT IN USE FOR "DELUPPGIFT03"
     setupDone = true; // Setup is complete.
     if(setupDone){
         uartPutChar('\n');
@@ -47,7 +44,7 @@ void onButtonPressed() {
     } else {
         setLedBrightness(MIN_POWER_VALUE);
     }
-    _delay_ms(100);
+    _delay_ms(70);
 };
 
 bool isButtonPressed() {

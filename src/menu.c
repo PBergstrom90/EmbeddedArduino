@@ -8,7 +8,6 @@
 #include "command.h"
 #include "led.h"
 #include "device.h"
-#include "adc.h"
 
 bool isRunning = true;
 
@@ -19,16 +18,12 @@ void mainMenu() {
     uartPutString("Submit 'ledtoggle', 'ledtimertoggle', 'ledbrightness <0-255>' or 'ledpower <0-255> <200-5000' command, and press 'Enter'.");  
     uartPutChar('\n');
     while (isRunning) {
-        // In order for the LED to not toggle constantly during a buttonpress, 
-        // we check the current and previous state of the button.
         bool buttonPressed = isButtonPressed();
         if (buttonPressed && !previousButtonState) {
             onButtonPressed();
         }
         previousButtonState = buttonPressed;
 
-        // Check if the ADC is toggled, and if it is, read and print the ADC value.
-        // adcLoop(); - NOT IN USE FOR "DELUPPGIFT 3"
         uartLoop();
     }
 };

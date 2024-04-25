@@ -2,6 +2,7 @@
     "files.associations": {
         "led.h": "c",
         "io.h": "c",
-        "arduino.h": "c"
+        "arduino.h": "c",
+        "timer.h": "c"
     }
 }

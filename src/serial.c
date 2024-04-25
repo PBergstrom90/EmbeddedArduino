@@ -7,7 +7,6 @@
 #include "timer.h"
 #include "menu.h"
 #include "command.h"
-#include "adc.h"
 
 void uartInit(unsigned int ubrr) {
     // Set baud rate.

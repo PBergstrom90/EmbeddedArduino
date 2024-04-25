@@ -57,18 +57,15 @@ This repository contains five different branches, each focusing on specific task
     git clone <repository_url>
     ```
   
-2. **Switch to Desired Branch**
-    ```bash
-    git checkout <branch_name>
-    ```
-  
-3. **Upload Code to Arduino/Freenove Board**
-    - Open the `.ino` file in the Arduino IDE.
-    - Select the correct board and port.
-    - Click "Upload" to upload the code to the board.
+2. **Open Project in VS Code**
+    - Navigate to the project directory in your terminal.
+    - Run `code .` to open the project in Visual Studio Code.
+
+3. **PlatformIO Extension**
+    - Make sure you have the PlatformIO extension installed in VS Code.
+    - In the PlatformIO toolbar at the bottom, select the correct board.
+    - Click on the "Upload" button (arrow icon) to build and upload the code to the board.
 
 4. **View Serial Monitor Output**
-    - Open the Serial Monitor in the Arduino IDE to view the program output.
-
----
+    - Open the Serial Monitor by clicking on the plug icon in the PlatformIO toolbar at the bottom to view the program output.
 

@@ -6,7 +6,6 @@ enum Command {
     LED_POWER_VALUE_CMD,
     LED_TIMER_TOGGLE_CMD,
     LED_BRIGHTNESS_CMD,
-    ADC_TOGGLE_CMD,
     EXIT_CMD,
     INVALID_CMD
 };

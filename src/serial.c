@@ -7,7 +7,6 @@
 #include "timer.h"
 #include "menu.h"
 #include "command.h"
-#include "adc.h"
 
 void uartInit(unsigned int ubrr) {
     // Set baud rate.
@@ -29,7 +28,7 @@ void uartLoop() {
         uartPutChar('\n');
         parseUserInput(inputString);
     }
-}
+};
 
 bool uartDataAvailable() {
     // UCSR0A is used here to check the UART Receive Complete (RXC0) bit. 

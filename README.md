@@ -26,7 +26,7 @@ This repository contains five different branches, each focusing on specific task
 
 - Connect an LED to pin 3 (PWM capable).
 - Implement a configurable timer with Timer1.
-- Create a command interpreter that handles the command `ledpowerfreq <power> <time>`.
+- Create a command interpreter that handles the command `ledpower <power> <time>`.
 
 ### 4. Deluppgift04-ButtonCounter (Using Counter Mode with Timer1)
 

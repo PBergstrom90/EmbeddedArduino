@@ -15,4 +15,4 @@ int main() {
     uartPutString("--- DEVICE OFFLINE ---");
     uartPutChar('\n');
     return 0;
-}
+};

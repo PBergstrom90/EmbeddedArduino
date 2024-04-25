@@ -18,13 +18,14 @@
 // String buffersize
 #define PRINTOUT_RANGE 5
 
-extern bool ledOn;
-extern volatile bool ledTimerOn;  
+extern bool ledOn;  
 extern volatile uint8_t currentPwmValue;
 
 void ledToggle();
 void setLedBrightness(uint8_t pwmValue);
-void ledRampTime(uint16_t timeMs);
+void ledRampTime(short int timeMs);
 void setLedOn(bool ledOn);
+void pwmLedOn();
+void pwmLedOff();
 
 #endif // _LED_H_

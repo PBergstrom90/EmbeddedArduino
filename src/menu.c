@@ -12,18 +12,12 @@
 bool isRunning = true;
 
 void mainMenu() {
-    bool previousButtonState = false;
     uartPutString("--- DEVICE ONLINE ---");
     uartPutChar('\n');
-    uartPutString("Submit 'ledtoggle' or 'ledramptime <200-4000>' command, and press 'Enter'.");  
+    uartPutString("Submit 'ledtoggle' or 'ledramptime <500-10000>' command, and press 'Enter'.");  
     uartPutChar('\n');
+    // DRIVER CODE
     while (isRunning) {
-        bool buttonPressed = isButtonPressed();
-        if (buttonPressed && !previousButtonState) {
-            onButtonPressed();
-        }
-        previousButtonState = buttonPressed;
-
         uartLoop();
     }
 };

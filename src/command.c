@@ -32,7 +32,7 @@ void parseUserInput(const char *inputString) {
 enum Command parseCommand(const char* input) {
     if (strncmp(input, "ledtoggle", strlen("ledtoggle")) == 0) {
         return LED_TOGGLE_CMD;
-    } else if (strncmp(input, "ledramptime", strlen("ledpower")) == 0) {
+    } else if (strncmp(input, "ledramptime", strlen("ledramptime")) == 0) {
         return LED_RAMP_TIME_CMD;
     } else if (strncmp(input, "exit", strlen("exit")) == 0) {
         return EXIT_CMD;
@@ -51,7 +51,7 @@ void executeCommand(enum Command cmd, short int value) {
             if(value >= MIN_TIME_MS && value <= MAX_TIME_MS) {
                 ledRampTime(value);
             } else {
-                uartPutString("ERROR: Invalid LED POWERVALUE or timeMs.");
+                uartPutString("ERROR: Invalid timeMs value.");
                 uartPutChar('\n');
             }
             break;

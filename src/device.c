@@ -21,7 +21,6 @@ void setup() {
     PORTD |= (1 << BUTTON_PIN);
 
     uartInit(UBRR);
-    timer1Init();
     timer2Init();
     sei(); // Enable global interrupts.
     setupDone = true; // Setup is complete.
@@ -35,18 +34,4 @@ void setup() {
         isRunning = false;
         uartPutChar('\n');
     }
-};
-
-void onButtonPressed() {
-    ledOn = !ledOn; // Toggle LED boolean.
-    if(ledOn) {
-        setLedBrightness(MAX_POWER_VALUE);
-    } else {
-        setLedBrightness(MIN_POWER_VALUE);
-    }
-    _delay_ms(70);
-};
-
-bool isButtonPressed() {
-    return !(BUTTON_PIN_REGISTER & (1 << BUTTON_PIN));
 };

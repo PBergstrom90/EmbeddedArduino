@@ -41,7 +41,7 @@ This repository contains five different branches, each focusing on specific task
 #### Instructions:
 
 - Ramp an LED's power linearly from 0-255 and then down periodically.
-- Control the ramp time via a command sent through the serial port, e.g., `ledramptime 500 ms`.
+- Control the ramp time via a command sent through the serial port, e.g., `ledramptime 500` milliseconds.
 
 ### Main 
 

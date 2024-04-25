@@ -14,10 +14,9 @@ bool isRunning = true;
 
 void mainMenu() {
     bool previousButtonState = false;
-    char inputString[MAX_INPUT_LENGTH];
     uartPutString("--- DEVICE ONLINE ---");
     uartPutChar('\n');
-    uartPutString("Submit 'ledtoggle', 'ledtimertoggle', 'adctoggle' or 'ledpower <0-255>' command, and press 'Enter'.");  
+    uartPutString("Submit 'ledtoggle', 'ledtimertoggle' or 'adctoggle' command, and press 'Enter'.");  
     uartPutChar('\n');
     
     while (isRunning) {
@@ -29,9 +28,7 @@ void mainMenu() {
         }
         previousButtonState = buttonPressed;
 
-        // Check if the ADC is toggled, and if it is, read and print the ADC value.
-        adcLoop();
-        
-        uartLoop(inputString);
+        adcLoop(); // Check if the ADC is toggled, and if it is, read and print the ADC value.
+        uartLoop();
     }
 };

@@ -38,11 +38,11 @@ ISR(TIMER2_OVF_vect) {
     // Rough 1 second delay.
     static uint16_t count = 0;
     count++;
-    if (count >= 61) { // Approximately 1 second (16MHz/1024/256 = 61.035 Hz).
+    if (count >= 61) { // Approximately 1 second.
         adcPrintState = true;
         count = 0;
     }
-}
+};
 
 // Interrupt when ADC-conversion is complete.
 ISR(ADC_vect) {
@@ -51,7 +51,7 @@ ISR(ADC_vect) {
     } else {
         adcReadState = false;
     }
-}
+};
 
 // Switch the compare match value for the timer to increase/decrease LED toggle frequency.
 void switchTimerValue(uint32_t timerValue) {
@@ -60,6 +60,7 @@ void switchTimerValue(uint32_t timerValue) {
 
 // Switch the prescaler for the timer, if necessary.
 void switchPrescaler(uint16_t prescaler) {
+    unsigned char oldSreg = SREG; // Save the current state of the global interrupt flag. 
     cli(); // Disable interrupts.
     TCCR1B &= ~((1 << CS10) | (1 << CS11) | (1 << CS12)); // Stop the timer.
     switch(prescaler) {
@@ -81,6 +82,5 @@ void switchPrescaler(uint16_t prescaler) {
         default:
             break;
     }
-    sei(); // Enable interrupts.
-    TCCR1B |= prescaler; // Restart the timer with the new prescaler.
+    SREG = oldSreg; // Restore the global interrupt flag.
 };

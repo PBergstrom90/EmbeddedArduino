@@ -12,12 +12,12 @@
 #include "adc.h"
 
 void parseUserInput(const char *inputString) { 
-    if (strlen(inputString) > MAX_INPUT_LENGTH) {
+    if (strlen(inputString) > RX_BUF_SIZE) {
         uartPutString("ERROR: Input exceeds maximum allowed length.");
         uartPutChar('\n');
         return;
     }
-    char command[MAX_INPUT_LENGTH];
+    char command[RX_BUF_SIZE];
     short int value;
     // Use sscanf to parse the input string
     if (sscanf(inputString, "%s %hd", command, &value) == 2) {
@@ -33,61 +33,51 @@ void parseUserInput(const char *inputString) {
 
 enum Command parseCommand(const char* input) {
     if (strncmp(input, "ledtoggle", strlen("ledtoggle")) == 0) {
-        return LED_TOGGLE;
-    } else if (strncmp(input, "ledpower", strlen("ledpower")) == 0) {
-        return LED_POWER_VALUE;
+        return LED_TOGGLE_CMD;
     } else if (strncmp(input, "ledtimertoggle", strlen("ledtimertoggle")) == 0) {
-        return LED_TIMER_TOGGLE;
+        return LED_TIMER_TOGGLE_CMD;
     } else if (strncmp(input, "adctoggle", strlen("adctoggle")) == 0) {
-        return ADC_TOGGLE;
+        return ADC_TOGGLE_CMD;
     } else if (strncmp(input, "setprescaler", strlen("setprescaler")) == 0) {
-        return SET_PRESCALER;
+        return SET_PRESCALER_CMD;
     } else if (strncmp(input, "exit", strlen("exit")) == 0) {
-        return EXIT;
+        return EXIT_CMD;
     }
-    return INVALID_COMMAND;
+    return INVALID_CMD;
 };
 
 void executeCommand(enum Command cmd, short int value) {
     switch (cmd) {
-        case LED_TOGGLE:
+        case LED_TOGGLE_CMD:
             ledToggle();
             uartPutString("LED is toggled.");
             uartPutChar('\n');
             break;
-        case LED_POWER_VALUE:
-            if(value >= MIN_POWER_VALUE && value <= MAX_POWER_VALUE) {
-                ledPowerValue(value);
-            } else {
-                uartPutString("ERROR: Invalid LED POWERVALUE.");
-                uartPutChar('\n');
-            }
-            break;
-        case LED_TIMER_TOGGLE:
+        case LED_TIMER_TOGGLE_CMD:
             ledTimer = !ledTimer;
             uartPutString("LED Timer is: ");
             uartPutString(ledTimer ? "Enabled." : "Disabled.");
             uartPutChar('\n');
             break;
-        case ADC_TOGGLE:
+        case ADC_TOGGLE_CMD:
             adcToggle = !adcToggle;
             uartPutString("ADC is: ");
             uartPutString(adcToggle ? "Enabled." : "Disabled.");
             uartPutChar('\n');
             break;
-        case SET_PRESCALER:
+        case SET_PRESCALER_CMD:
             switchPrescaler(value);
             uartPutString("Prescaler set to: ");
             uartPutInt(value);
             uartPutChar('\n');
             break;
-        case EXIT:
+        case EXIT_CMD:
             uartPutChar('\n');
             uartPutString("Exiting program... ");
             uartPutChar('\n');
             isRunning = false;
             break;
-        case INVALID_COMMAND:
+        case INVALID_CMD:
             uartPutString("ERROR: Invalid command.");
             uartPutChar('\n');
             break;

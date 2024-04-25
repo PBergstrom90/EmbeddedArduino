@@ -46,19 +46,19 @@ void adcInit() {
 float adcRead() {
     // Read the ADC value.
     uint16_t adcValue = ADC;
-    float millivolts = ((float)adcValue / 1023) * 5000;
+    float millivolts = ((float)adcValue / 1023) * MILLIVOLTS_5000;
     uint32_t timerValue;
-    if (millivolts < 100) {
+    if (millivolts < MILLIVOLTS_100) {
         setLedOn(true);
-    } else if(millivolts < 1000) {
+    } else if(millivolts < MILLIVOLTS_1000) {
         timerValue = 15624; // 1 second.
-    } else if (millivolts < 2000) {
+    } else if (millivolts < MILLIVOLTS_2000) {
         timerValue = 12499; // 800ms.
-    } else if (millivolts < 3000) {
+    } else if (millivolts < MILLIVOLTS_3000) {
         timerValue = 7812; // 500 ms
-    } else if (millivolts < 4000) {
+    } else if (millivolts < MILLIVOLTS_4000) {
         timerValue = 3124; // 200 ms.
-    } else if (millivolts < 5000){
+    } else if (millivolts < MILLIVOLTS_5000){
         timerValue = 1562; // 100 ms.
     }
     switchTimerValue(timerValue);

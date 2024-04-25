@@ -20,7 +20,7 @@ This repository contains five different branches, each focusing on specific task
 - Set up ADC and read the value via hardware registers.
 - Print the read value and calculated voltage on pin A0 every second via the serial port.
 
-### 3. Deluppgift03-LEDcmd
+### 3. Deluppgift03-LEDcmd (LED Control from Command Line)
 
 #### Instructions:
 
@@ -28,7 +28,7 @@ This repository contains five different branches, each focusing on specific task
 - Implement a configurable timer with Timer1.
 - Create a command interpreter that handles the command `ledpowerfreq <power> <time>`.
 
-### 4. Deluppgift04-ButtonCounter
+### 4. Deluppgift04-ButtonCounter (Using Counter Mode with Timer1)
 
 #### Instructions:
 
@@ -36,7 +36,7 @@ This repository contains five different branches, each focusing on specific task
 - Use Timer1 to measure the input from pin 5.
 - Print the number of button presses every second.
 
-### 5. Deluppgift05-RampLED
+### 5. Deluppgift05-RampLED (Control PWM up and down)
 
 #### Instructions:
 

@@ -10,7 +10,7 @@
 
 volatile bool timer1Enabled = false;
 
-void timerInit() {
+void timer1Init() {
     // Timer 1 initialization
     TCCR1A = 0; // Set default values
     TCCR1B = 0;
@@ -25,4 +25,4 @@ ISR(TIMER1_COMPA_vect) {
     if(timer1Enabled) {
         ledToggle();
     }
-}
+};

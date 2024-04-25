@@ -4,7 +4,8 @@
 #include <stdbool.h>
 
 extern bool isRunning;
-void buttonPressed();
+void onButtonPressed();
+bool isButtonPressed();
 void setup();
 void mainMenu();
 

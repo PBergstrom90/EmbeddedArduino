@@ -9,9 +9,9 @@
 #include "serial.h"
 
 int main() {
-    
     setup();
     mainMenu();
-    
+    uartPutString("--- DEVICE OFFLINE ---");
+    uartPutChar('\n');
     return 0;
 }

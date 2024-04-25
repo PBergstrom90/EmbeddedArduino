@@ -5,7 +5,6 @@
 #include <avr/interrupt.h>
 
 extern volatile bool timer1Enabled; 
-void timerInit();
-ISR(TIMER1_OVF_vect);
+void timer1Init();
 
 #endif // TIMER_H

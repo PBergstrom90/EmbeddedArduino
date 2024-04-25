@@ -10,8 +10,12 @@
 
 bool isRunning = true;
 
-void buttonPressed() {
+void onButtonPressed() {
     ledToggle();
+};
+
+bool isButtonPressed() {
+    return !(BUTTON_PIN_REGISTER & (1 << BUTTON_PIN));
 };
 
 void setup() {
@@ -23,45 +27,27 @@ void setup() {
     // Because there is a 10k-Ohm resistor between 5V and the button.
     PORTD |= (1 << BUTTON_PIN);
     uartInit(UBRR);
-    
-    // Initialize the timer
-    timerInit();
-
+    timer1Init();
     uartPutString("Setup complete.");
 };
 
 void mainMenu() {
-    while(isRunning) {
-        // --- DRIVER CODE ---
     bool previousButtonState = false;
-    char inputString[MAX_INPUT_LENGTH];
     uartPutChar('\n');
     uartPutString("--- DEVICE ONLINE ---");
     uartPutChar('\n');
-    uartPutString("Submit 'ledtoggle', 'timertoggle' or 'ledpower <0-255>' command, and press 'Enter'.");  
+    uartPutString("Submit 'ledtoggle' or 'timertoggle' command, and press 'Enter'.");  
     uartPutChar('\n');
+    // DRIVER CODE
     while (isRunning) {
         // In order for the LED to not toggle constantly during a buttonpress, 
         // we check the current and previous state of the button.
-        bool currentButtonState = !(PIND & (1 << BUTTON_PIN));
-        if (currentButtonState && !previousButtonState) {
-            // If button was pressed for the first time, toggle LED.
-            buttonPressed();
+        bool buttonPressed = isButtonPressed();
+        if (buttonPressed && !previousButtonState) {
+            onButtonPressed();
         }
-        previousButtonState = currentButtonState;
-        // This condition checks the UART Receive Complete (RXC) -flag in the UART Status Register (UCSR0A),
-        // and then records the userinput, as well as echoing the chars back in the Serial Monitor. Parse userinput in command.c.
-        if (UCSR0A & (1 << RXC0)) {
-            uartRecStringAndEcho(inputString);
-            uartPutChar('\n');
-            uartPutString("Received: ");
-            uartPutString(inputString);
-            uartPutChar('\n');
-            parseUserInput(inputString);
-        }
-    }
-    uartPutString("Program closed.");
-    uartPutChar('\n');
-    }
+        previousButtonState = buttonPressed;
 
+        uartLoop();
+    }
 };

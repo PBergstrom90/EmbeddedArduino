@@ -1,6 +1,10 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include <avr/io.h>
 #include "serial.h"
+#include "command.h"
+#include "menu.h"
+#include "timer.h"
 #include "led.h"
 
 void uartInit(unsigned int ubrr) {
@@ -11,6 +15,24 @@ void uartInit(unsigned int ubrr) {
     UCSR0B = (1 << RXEN0) | (1 << TXEN0); 
     // UART Control and Status Register C: Set frame format: 8 data, 1 stop bit.
     UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);
+};
+
+void uartLoop() {
+    char inputString[RX_BUF_SIZE];
+    if (uartDataAvailable()) {
+        uartRecStringAndEcho(inputString);
+        uartPutChar('\n');
+        uartPutString("Received: ");
+        uartPutString(inputString);
+        uartPutChar('\n');
+        parseUserInput(inputString);
+    }
+};
+
+bool uartDataAvailable() {
+    // UCSR0A is used here to check the UART Receive Complete (RXC0) bit. 
+    // This bit indicates whether there is data available in the UART receive buffer.
+    return UCSR0A & (1 << RXC0);
 };
 
 void uartPutChar(const char c) {

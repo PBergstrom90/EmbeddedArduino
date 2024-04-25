@@ -9,13 +9,13 @@
 #include "menu.h"
 #include "timer.h"
 
-void parseUserInput(char inputString[MAX_INPUT_LENGTH]) { 
-    if (strlen(inputString) > MAX_INPUT_LENGTH) {
+void parseUserInput(const char *inputString) { 
+    if (strlen(inputString) > RX_BUF_SIZE) {
         uartPutString("ERROR: Input length exceeds maximum allowed length.");
         uartPutChar('\n');
         return;
     }
-    char command[MAX_INPUT_LENGTH];
+    char command[RX_BUF_SIZE];
     short int value;
     // Use sscanf to parse the input string
     if (sscanf(inputString, "%s %hd", command, &value) == 2) {
@@ -29,46 +29,36 @@ void parseUserInput(char inputString[MAX_INPUT_LENGTH]) {
     }
 };
 
-enum Command parseCommand(const char* input) {
+enum Command parseCommand(const char *input) {
     if (strncmp(input, "ledtoggle", strlen("ledtoggle")) == 0) {
-        return LED_TOGGLE;
-    } else if (strncmp(input, "ledpower", strlen("ledpower")) == 0) {
-        return LED_POWER_VALUE;
+        return LED_TOGGLE_CMD;
     } else if (strncmp(input, "timertoggle", strlen("timertoggle")) == 0) {
-        return TIMER_TOGGLE;
+        return TIMER_TOGGLE_CMD;
     }else if (strcmp(input, "exit") == 0) {
-        return EXIT;
+        return EXIT_CMD;
     }
-    return INVALID_COMMAND;
+    return INVALID_CMD;
 };
 
 void executeCommand(enum Command cmd, short value) {
     switch (cmd) {
-        case LED_TOGGLE:
+        case LED_TOGGLE_CMD:
                 ledToggle();
                 uartPutString("LED is toggled.");
                 uartPutChar('\n');
             break;
-        case LED_POWER_VALUE:
-            if(value >= MIN_POWER_VALUE && value <= MAX_POWER_VALUE) {
-                ledPowerValue(value);
-            } else {
-                uartPutString("ERROR: Invalid LED POWERVALUE.");
-                uartPutChar('\n');
-            }
-            break;
-        case TIMER_TOGGLE:
+        case TIMER_TOGGLE_CMD:
             timer1Enabled = !timer1Enabled;
             uartPutString("Timer 1 is: ");
-            uartPutString(timer1Enabled ? "enabled." : "disabled.");
+            uartPutString(timer1Enabled ? "Enabled." : "Disabled.");
             uartPutChar('\n');
             break;
-        case EXIT:
+        case EXIT_CMD:
             uartPutString("Exiting program... ");
             uartPutChar('\n');
             isRunning = false;
             break;
-        case INVALID_COMMAND:
+        case INVALID_CMD:
             uartPutString("ERROR: Invalid command.");
             uartPutChar('\n');
             break;

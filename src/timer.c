@@ -10,7 +10,6 @@
 #include "device.h"
 
 uint16_t prescalerValue = PRESCALER_1024; // Default prescaler value.
-volatile uint16_t overflowCount = 0; // Global variable to store the number of timeroverflows.
 
 // 16-bit timer. Used to adjust the LED-toggle frequency.
 void timer1Init() {
@@ -35,13 +34,7 @@ void timer2Init() {
 // Adjustable LED frequency-delay.
 ISR(TIMER1_COMPA_vect) {
     if(ledTimerOn) {
-        if(overflowCount > 0) {
-            overflowCount--;
-        }  
-        if (overflowCount == 0) {
-            // When overflowCount reaches 0, toggle the LED.
-            ledToggle();
-        }
+        setLedBrightness(currentPwmValue);
     }
 };
 

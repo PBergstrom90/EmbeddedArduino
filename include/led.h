@@ -24,7 +24,7 @@ extern volatile uint8_t currentPwmValue;
 
 void ledToggle();
 void setLedBrightness(uint8_t pwmValue);
-void ledPowerValue(uint8_t pwmValue, uint16_t timeMs);
+void ledRampTime(uint16_t timeMs);
 void setLedOn(bool ledOn);
 
 #endif // _LED_H_

@@ -15,7 +15,7 @@ void mainMenu() {
     bool previousButtonState = false;
     uartPutString("--- DEVICE ONLINE ---");
     uartPutChar('\n');
-    uartPutString("Submit 'ledtoggle', 'ledtimertoggle', 'ledbrightness <0-255>' or 'ledpower <0-255> <200-5000' command, and press 'Enter'.");  
+    uartPutString("Submit 'ledtoggle' or 'ledramptime <200-4000>' command, and press 'Enter'.");  
     uartPutChar('\n');
     while (isRunning) {
         bool buttonPressed = isButtonPressed();

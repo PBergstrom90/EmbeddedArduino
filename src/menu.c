@@ -26,8 +26,6 @@ void mainMenu() {
         }
         previousButtonState = buttonPressed;
 
-        // Check if the ADC is toggled, and if it is, read and print the ADC value.
-        // adcLoop(); - NOT IN USE FOR "DELUPPGIFT 3"
         uartLoop();
     }
 };

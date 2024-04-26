@@ -23,9 +23,7 @@ void setup() {
     uartInit(UBRR);
     timer1Init();
     timer2Init();
-    // adcInit(); // - NOT IN USE FOR "DELUPPGIFT03"
     sei(); // Enable global interrupts.
-    // adcConvert(); // - NOT IN USE FOR "DELUPPGIFT03"
     setupDone = true; // Setup is complete.
     if(setupDone){
         uartPutChar('\n');

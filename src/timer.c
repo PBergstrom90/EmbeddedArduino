@@ -57,30 +57,3 @@ ISR(ADC_vect) {
 void switchTimerValue(uint32_t timerValue) {
     OCR1A = timerValue; // Set the new compare match value.
 };
-
-// Switch the prescaler for the timer, if necessary.
-void switchPrescaler(uint16_t prescaler) {
-    unsigned char oldSreg = SREG; // Save the current state of the global interrupt flag. 
-    cli(); // Disable interrupts.
-    TCCR1B &= ~((1 << CS10) | (1 << CS11) | (1 << CS12)); // Stop the timer.
-    switch(prescaler) {
-        case 1:
-            TCCR1B |= (1 << CS10);
-            break;
-        case 8:
-            TCCR1B |= (1 << CS11);
-            break;
-        case 64:
-            TCCR1B |= (1 << CS11) | (1 << CS10);
-            break;
-        case 256:
-            TCCR1B |= (1 << CS12);
-            break;
-        case 1024:
-            TCCR1B |= (1 << CS12) | (1 << CS10);
-            break;
-        default:
-            break;
-    }
-    SREG = oldSreg; // Restore the global interrupt flag.
-};

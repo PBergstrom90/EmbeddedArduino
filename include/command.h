@@ -5,7 +5,6 @@ enum Command {
     LED_TOGGLE_CMD,
     LED_TIMER_TOGGLE_CMD,
     ADC_TOGGLE_CMD,
-    SET_PRESCALER_CMD,
     EXIT_CMD,
     INVALID_CMD
 };

@@ -7,6 +7,5 @@
 void timer1Init();
 void timer2Init();
 void switchTimerValue(uint32_t timerValue);
-void switchPrescaler(uint16_t prescaler);
 
 #endif // TIMER_H

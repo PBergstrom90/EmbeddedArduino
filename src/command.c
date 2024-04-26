@@ -38,8 +38,6 @@ enum Command parseCommand(const char* input) {
         return LED_TIMER_TOGGLE_CMD;
     } else if (strncmp(input, "adctoggle", strlen("adctoggle")) == 0) {
         return ADC_TOGGLE_CMD;
-    } else if (strncmp(input, "setprescaler", strlen("setprescaler")) == 0) {
-        return SET_PRESCALER_CMD;
     } else if (strncmp(input, "exit", strlen("exit")) == 0) {
         return EXIT_CMD;
     }
@@ -63,12 +61,6 @@ void executeCommand(enum Command cmd, short int value) {
             adcToggle = !adcToggle;
             uartPutString("ADC is: ");
             uartPutString(adcToggle ? "Enabled." : "Disabled.");
-            uartPutChar('\n');
-            break;
-        case SET_PRESCALER_CMD:
-            switchPrescaler(value);
-            uartPutString("Prescaler set to: ");
-            uartPutInt(value);
             uartPutChar('\n');
             break;
         case EXIT_CMD:

@@ -82,7 +82,6 @@ void uartRecStringAndEcho(char *s) {
         receivedChar = uartGetChar();
     }
     *s = '\0'; // Null-terminate the string
-    
     if(bufferCounter == RX_BUF_SIZE - 1) {
         uartPutChar('\n');
         uartPutString("ERROR: Input exceeds maximum allowed characters.");
